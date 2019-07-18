@@ -1,8 +1,8 @@
-package de.ugoe.cs.smartshark.jmweSHARK;
+package de.ugoe.cs.smartshark.mutaSHARK;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
-import de.ugoe.cs.smartshark.jmweSHARK.util.Parameter;
+import de.ugoe.cs.smartshark.mutaSHARK.util.Parameter;
 import de.ugoe.cs.smartshark.model.Project;
 
 import org.mongodb.morphia.Datastore;
@@ -20,7 +20,8 @@ import java.util.List;
 /**
 *
  */
-public class JmweShark {
+public class MutaShark
+{
 
 	public static void main(String[] args) {
 		Parameter param = Parameter.getInstance();

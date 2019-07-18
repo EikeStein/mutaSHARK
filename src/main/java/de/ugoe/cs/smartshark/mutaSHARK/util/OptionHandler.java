@@ -1,4 +1,4 @@
-package de.ugoe.cs.smartshark.jmweSHARK.util;
+package de.ugoe.cs.smartshark.mutaSHARK.util;
 
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;

@@ -1,4 +1,4 @@
-package de.ugoe.cs.smartshark.jmweSHARK.util;
+package de.ugoe.cs.smartshark.mutaSHARK.util;
 
 import org.apache.commons.cli.*;
 
@@ -89,6 +89,7 @@ public class Parameter {
     return url;
   }
 
+  @SuppressWarnings("BooleanMethodIsAlwaysInverted")
   public boolean isInitialized() {
     return initialized;
   }

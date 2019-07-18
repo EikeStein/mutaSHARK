@@ -15,7 +15,7 @@ allprojects {
 }
 
 apply plugin: 'application'
-mainClassName = 'de.ugoe.cs.smartshark.jmweSHARK.JmweSHARK'
+mainClassName = 'de.ugoe.cs.smartshark.mutaSHARK.JmweSHARK'
 	
 dependencies {
     // The production code uses the SLF4J logging API at compile time
@@ -34,17 +34,19 @@ dependencies {
 if (project.hasProperty('projectVersion')) {
   project.version = project.projectVersion
 } else {
-  project.version = findProperty('projectVersion');
+  project.version = findProperty('projectVersion')
 }
 
 //create a single Jar with all dependencies
 task fatJar(type: Jar) {
-	manifest {
-        attributes 'Implementation-Title': 'SmartSHARK jmweSHARK',  
+	//noinspection GroovyAssignabilityCheck
+    manifest {
+        attributes 'Implementation-Title': 'SmartSHARK mutaSHARK',
         	'Implementation-Version': 1,
-        	'Main-Class': 'de.ugoe.cs.smartshark.jmweSHARK.JmweSHARK'
+        	'Main-Class': 'de.ugoe.cs.smartshark.mutaSHARK.JmweSHARK'
     }
     baseName = project.name + '-all'
+    //noinspection GroovyAssignabilityCheck
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
     with jar
 }
