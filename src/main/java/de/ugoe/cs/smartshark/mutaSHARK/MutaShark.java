@@ -34,6 +34,7 @@ public class MutaShark
 			System.out.println(project.getName());
 		}
 
+
 		setLogLevel();
 	}
 

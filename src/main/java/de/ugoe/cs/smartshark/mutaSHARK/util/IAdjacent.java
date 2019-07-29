@@ -6,3 +6,4 @@ public interface IAdjacent<T>
 {
     List<T> getAdjacent(T source);
 }
+
