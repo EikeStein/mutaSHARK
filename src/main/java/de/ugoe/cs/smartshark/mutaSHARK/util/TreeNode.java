@@ -1,32 +1,35 @@
 package de.ugoe.cs.smartshark.mutaSHARK.util;
 
-import com.github.gumtreediff.tree.ITree;
+import com.github.gumtreediff.tree.Tree;
+
+import java.util.Objects;
 
 public class TreeNode
 {
-    private final ITree tree;
-    private final IMutationOperator mutationOperator;
+    private final Tree tree;
 
-    /**
-     * Deep clones a tree.
-     *
-     * @param tree The tree to clone
-     */
-    public TreeNode(ITree tree)
+    public TreeNode(Tree tree)
     {
         this.tree = tree;
-        mutationOperator = null;
     }
 
-    public TreeNode(ITree mutatedTree, IMutationOperator mutationOperator)
+    public Tree getClonedTree()
     {
-        this.tree = mutatedTree;
-        this.mutationOperator = mutationOperator;
+        return tree.deepCopy();
     }
 
-    public ITree getTree()
+    @Override
+    public boolean equals(Object o)
     {
-        ITree tree = this.tree;
-        return this.tree;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TreeNode treeNode = (TreeNode) o;
+        return Objects.equals(tree, treeNode.tree);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return Objects.hash(tree);
     }
 }

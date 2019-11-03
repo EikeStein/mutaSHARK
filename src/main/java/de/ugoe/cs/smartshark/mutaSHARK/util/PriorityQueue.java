@@ -1,53 +1,57 @@
 package de.ugoe.cs.smartshark.mutaSHARK.util;
 
-import javax.management.OperationsException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
-public class PriorityQueue<T>
+public class PriorityQueue
 {
-    private final List<T> list = new ArrayList<>();
-    private IValueProvider<T> valueProvider;
+    private List<SearchNode> queue = new ArrayList<>();
 
-    public PriorityQueue(IValueProvider<T> valueProvider)
+    public void enqueue(SearchNode searchNode)
     {
-        this.valueProvider = valueProvider;
-    }
-
-    public boolean isEmpty()
-    {
-        return list.isEmpty();
-    }
-
-    public int getCount()
-    {
-        return list.size();
-    }
-
-    public void enqueue(T d)
-    {
-        list.add(d);
-    }
-
-    public T dequeue()
-    {
-        if(list.isEmpty())
-            throw new IndexOutOfBoundsException();
-        T result = null;
-        double lowestValue = Double.MAX_VALUE;
-
-        for (T candidate : list)
+        int index = 0;
+        while (index - 1 < queue.size() && queue.get(index).getTotalCost() <= searchNode.getTotalCost())
         {
-            double value = valueProvider.getValue(candidate);
-            if (value < lowestValue)
-            {
-                result = candidate;
-                lowestValue = value;
-            }
+            index++;
         }
-        if (result != null)
-            list.remove(result);
-        return result;
+        queue.add(index, searchNode);
     }
 
+    public SearchNode dequeue()
+    {
+        return queue.remove(0);
+    }
+
+    public int getSize()
+    {
+        return queue.size();
+    }
+
+    public void clear()
+    {
+        queue.clear();
+    }
+
+    public Stream<SearchNode> stream()
+    {
+        return queue.stream();
+    }
+
+    public SearchNode find(TreeNode treeNode)
+    {
+        for (SearchNode searchNode : queue)
+        {
+            if (searchNode.getCurrentTreeNode().equals(treeNode))
+                return searchNode;
+        }
+        return null;
+    }
+
+    public void replace(SearchNode originalNode, SearchNode newNode)
+    {
+        queue.remove(originalNode);
+        enqueue(newNode);
+    }
 }
+
