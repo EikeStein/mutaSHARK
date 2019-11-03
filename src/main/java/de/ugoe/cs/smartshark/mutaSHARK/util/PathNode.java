@@ -1,44 +1,49 @@
 package de.ugoe.cs.smartshark.mutaSHARK.util;
 
-import java.util.HashMap;
-
 public class PathNode<T>
 {
     private T source;
     private PathNode<T> prevNode;
-    private double f;
-    private double g;
-    private double h;
-    private int nt;
+    private double total;
+    private double pathToNodeConst;
+    private double heuristic;
 
-    public PathNode(T s, PathNode<T> p, double pg, double ph, int pnt, HashMap<T,Double> bestF){
+    public PathNode(T s, PathNode<T> previousNode, double pathToNodeCost, double heuristic){
         source = s;
-        prevNode = p;
-        g = pg;
-        h = ph;
-        f = g + h;
-        nt = pnt;
-        bestF.put(s, f);
+        prevNode = previousNode;
+        this.pathToNodeConst = pathToNodeCost;
+        this.heuristic = heuristic;
+        total = pathToNodeCost + heuristic;
     }
 
-    public double getG()
+    public double getPathToNodeCost()
     {
-        return g;
+        return pathToNodeConst;
     }
 
-    public double getH()
+    public double getHeuristic()
     {
-        return h;
+        return heuristic;
     }
 
-    public int getNt()
+    public double getTotalCost()
     {
-        return nt;
+        return total;
     }
 
-    public double getF()
+    @Override
+    public boolean equals(Object obj)
     {
-        return f;
+        if(obj instanceof PathNode<?>){
+            return equals((PathNode<?>) obj);
+        }
+        return super.equals(obj);
+    }
+
+    public boolean equals(PathNode<?> other){
+        if(other == null)
+            return false;
+        return other.source.equals(source);
     }
 
     public T getSource()

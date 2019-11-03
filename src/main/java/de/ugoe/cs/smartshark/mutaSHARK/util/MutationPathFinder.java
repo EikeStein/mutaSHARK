@@ -2,17 +2,14 @@ package de.ugoe.cs.smartshark.mutaSHARK.util;
 
 import com.github.gumtreediff.actions.ActionGenerator;
 import com.github.gumtreediff.actions.model.Action;
-import com.github.gumtreediff.matchers.CompositeMatcher;
-import com.github.gumtreediff.matchers.CompositeMatchers;
 import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.matchers.Matchers;
 import com.github.gumtreediff.tree.ITree;
-import com.github.gumtreediff.tree.TreeUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MutationPathFinder implements IAdjacent<TreeNode>, IDistance<TreeNode>, INodeDistance<TreeNode>
+public class MutationPathFinder implements IAdjacent<TreeNode>, IHeuristic<TreeNode>, INodeDistance<TreeNode>
 {
     private final Pathfinder<TreeNode> pathfinder;
     private final IMutationFactory mutationFactory;
@@ -41,7 +38,7 @@ public class MutationPathFinder implements IAdjacent<TreeNode>, IDistance<TreeNo
     }
 
     @Override
-    public double getDistance(TreeNode start, TreeNode end)
+    public double getHeuristic(TreeNode start, TreeNode end)
     {
         ITree startTree = start.getTree();
         ITree endTree = end.getTree();
