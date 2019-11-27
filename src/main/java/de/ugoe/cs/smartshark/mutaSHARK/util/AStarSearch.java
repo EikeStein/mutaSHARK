@@ -1,5 +1,7 @@
 package de.ugoe.cs.smartshark.mutaSHARK.util;
 
+import de.ugoe.cs.smartshark.mutaSHARK.util.mutators.TreeMutationOperator;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,7 +50,7 @@ public class AStarSearch
         for (TreeMutationOperator mutationOperator :
                 searchSettings.mutationOperators)
         {
-            List<TreeNode> possibleMutations = mutationOperator.getPossibleMutations(treeNode);
+            List<TreeNode> possibleMutations = mutationOperator.getPossibleMutations(treeNode, toNode);
             for (TreeNode newNode :
                     possibleMutations)
             {

@@ -1,5 +1,7 @@
 package de.ugoe.cs.smartshark.mutaSHARK.util;
 
+import de.ugoe.cs.smartshark.mutaSHARK.util.mutators.TreeMutationOperator;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
