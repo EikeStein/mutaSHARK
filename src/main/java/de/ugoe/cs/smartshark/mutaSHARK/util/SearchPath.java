@@ -13,7 +13,11 @@ public class SearchPath
         while (edge != null)
         {
             edges.add(0, edge);
-            edge = edge.getFromSearchNode().getEdgeToPreviousNode();
+            SearchNode fromSearchNode = edge.getFromSearchNode();
+            if (fromSearchNode != null)
+                edge = fromSearchNode.getEdgeToPreviousNode();
+            else
+                edge = null;
         }
     }
 

@@ -1,51 +1,54 @@
 package de.ugoe.cs.smartshark.mutaSHARK;
 
-import com.github.gumtreediff.actions.ActionGenerator;
+import com.github.gumtreediff.actions.EditScript;
+import com.github.gumtreediff.actions.SimplifiedChawatheScriptGenerator;
 import com.github.gumtreediff.actions.model.Action;
-import com.github.gumtreediff.client.diff.ui.web.views.DiffView;
 import com.github.gumtreediff.gen.Generators;
-import com.github.gumtreediff.io.TreeIoUtils;
+import com.github.gumtreediff.matchers.Mapping;
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.matchers.Matchers;
 import com.github.gumtreediff.tree.ITree;
-import com.github.gumtreediff.tree.Tree;
 import com.github.gumtreediff.tree.TreeContext;
-import de.ugoe.cs.smartshark.mutaSHARK.testclasses.to.ClassA;
+import com.github.gumtreediff.tree.TreeUtils;
+import de.ugoe.cs.smartshark.mutaSHARK.util.*;
+import de.ugoe.cs.smartshark.mutaSHARK.util.mutators.TreeMutationOperator;
+import de.ugoe.cs.smartshark.mutaSHARK.util.mutators.arithmetic.ArithmeticOperatorInsertionShortCutMutator;
 
-import java.io.IOException;
-import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MutaShark
 {
     public static void main(String[] args) throws Exception
     {
-        String classAFrom = "C:\\Users\\Eike\\OneDrive\\Documents\\Ausbildung\\Uni\\1919\\Masterarbeit\\Projekt\\mutaSHARK\\src\\main\\java\\de\\ugoe\\cs\\smartshark\\mutaSHARK\\testclasses\\from\\ClassA.java";
-        String classATo = "C:\\Users\\Eike\\OneDrive\\Documents\\Ausbildung\\Uni\\1919\\Masterarbeit\\Projekt\\mutaSHARK\\src\\main\\java\\de\\ugoe\\cs\\smartshark\\mutaSHARK\\testclasses\\to\\ClassA.java";
+        String classAFrom = "C:\\Users\\Eike\\OneDrive\\Documents\\Ausbildung\\Uni\\1919\\Masterarbeit\\Projekt\\Code\\mutaSHARK\\src\\main\\java\\de\\ugoe\\cs\\smartshark\\mutaSHARK\\testclasses\\from\\ClassA.java";
+        String classATo = "C:\\Users\\Eike\\OneDrive\\Documents\\Ausbildung\\Uni\\1919\\Masterarbeit\\Projekt\\Code\\mutaSHARK\\src\\main\\java\\de\\ugoe\\cs\\smartshark\\mutaSHARK\\testclasses\\to\\ClassA.java";
         com.github.gumtreediff.client.Run.initGenerators();
         TreeContext treeFrom = Generators.getInstance().getTree(classAFrom);
         TreeContext treeTo = Generators.getInstance().getTree(classATo);
 
-        ITree fromRoot = treeFrom.getRoot();
-        ITree toRoot = treeTo.getRoot();
+        ITree fromRoot = TreeHelper.updateTree(TreeHelper.findMethods(treeFrom.getRoot()).get(0));
+        ITree toRoot = TreeHelper.updateTree(TreeHelper.findMethods(treeTo.getRoot()).get(0));
+        TreeHelper.updateTree(toRoot);
 
-        Matcher matcher = Matchers.getInstance().getMatcher(fromRoot, toRoot);
-        matcher.match();
-        MappingStore mappings = matcher.getMappings();
+        ArithmeticOperatorInsertionShortCutMutator mutator = new ArithmeticOperatorInsertionShortCutMutator();
 
-        ActionGenerator actionGenerator = new ActionGenerator(fromRoot, toRoot, mappings);
-        List<Action> actions1 = actionGenerator.getActions();
-        List<Action> actions2 = actionGenerator.generate();
+        TreeNode toNode = new TreeNode(toRoot);
+        TreeNode fromNode = new TreeNode(fromRoot);
+        AStarSearch aStarSearch = new AStarSearch(fromNode, toNode);
+        ArrayList<TreeMutationOperator> mutationOperators = new ArrayList<>();
+        mutationOperators.add(new ArithmeticOperatorInsertionShortCutMutator());
+        SearchResult paths = aStarSearch.findPaths(new SearchSettings(1, 3, toNode, mutationOperators));
 
-        TreeIoUtils.TreeSerializer toXml = TreeIoUtils.toXml(treeFrom);
-        String output = toXml.toString();
-
-        for (ITree tree : fromRoot.getDescendants())
+        List<TreeNode> possibleMutations = mutator.getPossibleMutations(fromNode, toNode);
+        for (TreeNode possibleMutation : possibleMutations)
         {
-            int depth = tree.getDepth();
-            String typeLabel = treeFrom.getTypeLabel(tree.getType());
-
+            if (possibleMutation.getTree().isIsomorphicTo(toRoot))
+            {
+                String treeString = possibleMutation.getTree().toTreeString();
+                System.out.println(treeString);
+            }
         }
     }
 }

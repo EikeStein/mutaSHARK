@@ -47,6 +47,8 @@ public class AStarSearch
     private void expandNode(SearchNode searchNode, SearchSettings searchSettings)
     {
         TreeNode treeNode = searchNode.getCurrentTreeNode();
+        if(searchNode.getTotalHopCount()>=searchSettings.maxHops)
+            return;
         for (TreeMutationOperator mutationOperator :
                 searchSettings.mutationOperators)
         {
@@ -59,6 +61,7 @@ public class AStarSearch
 
                 SearchEdge searchEdge = new SearchEdge(searchNode, 1);
                 SearchNode successor = new SearchNode(newNode, searchEdge, searchSettings.heuristic);
+                searchEdge.setToSearchNode(successor);
                 double tentativeTotalCost = searchNode.getTotalCost() + searchEdge.getCost();
                 if (openList.find(newNode) != null)
                 {

@@ -11,7 +11,7 @@ public class PriorityQueue
     public void enqueue(SearchNode searchNode)
     {
         int index = 0;
-        while (index - 1 < queue.size() && queue.get(index).getTotalCost() <= searchNode.getTotalCost())
+        while (index < queue.size() && queue.get(index).getTotalCost() <= searchNode.getTotalCost())
         {
             index++;
         }

@@ -1,22 +1,30 @@
 package de.ugoe.cs.smartshark.mutaSHARK.util;
 
+import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.Tree;
+import com.github.gumtreediff.tree.TreeContext;
 
 import java.util.Objects;
 
 public class TreeNode
 {
-    private final Tree tree;
+    private final ITree tree;
 
-    public TreeNode(Tree tree)
+    public TreeNode(ITree tree)
     {
         this.tree = tree;
     }
 
-    public Tree getClonedTree()
+    public ITree getClonedTree()
     {
         return tree.deepCopy();
     }
+
+    public ITree getTree()
+    {
+        return tree;
+    }
+
 
     @Override
     public boolean equals(Object o)
@@ -24,7 +32,7 @@ public class TreeNode
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TreeNode treeNode = (TreeNode) o;
-        return Objects.equals(tree, treeNode.tree);
+        return tree.isIsomorphicTo(treeNode.tree);
     }
 
     @Override

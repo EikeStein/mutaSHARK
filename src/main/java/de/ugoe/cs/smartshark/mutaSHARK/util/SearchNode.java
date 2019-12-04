@@ -63,4 +63,20 @@ public class SearchNode
             heuristicCost = heuristic.getHeuristic(currentTreeNode);
         return heuristicCost;
     }
+
+    public int getTotalHopCount()
+    {
+        int count = 0;
+        SearchNode current = this;
+        while (current != null)
+        {
+            count++;
+            SearchEdge edgeToPreviousNode = current.getEdgeToPreviousNode();
+            if (edgeToPreviousNode != null)
+                current = edgeToPreviousNode.getFromSearchNode();
+            else
+                current = null;
+        }
+        return count;
+    }
 }
