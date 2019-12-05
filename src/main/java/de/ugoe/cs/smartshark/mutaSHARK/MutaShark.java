@@ -12,6 +12,8 @@ import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeContext;
 import com.github.gumtreediff.tree.TreeUtils;
 import de.ugoe.cs.smartshark.mutaSHARK.util.*;
+import de.ugoe.cs.smartshark.mutaSHARK.util.defects4j.Defects4JLoader;
+import de.ugoe.cs.smartshark.mutaSHARK.util.defects4j.Defects4JProjectName;
 import de.ugoe.cs.smartshark.mutaSHARK.util.mutators.TreeMutationOperator;
 import de.ugoe.cs.smartshark.mutaSHARK.util.mutators.arithmetic.ArithmeticOperatorInsertionShortCutMutator;
 
@@ -22,6 +24,8 @@ public class MutaShark
 {
     public static void main(String[] args) throws Exception
     {
+        new Defects4JLoader().LoadAll();
+
         String classAFrom = "C:\\Users\\Eike\\OneDrive\\Documents\\Ausbildung\\Uni\\1919\\Masterarbeit\\Projekt\\Code\\mutaSHARK\\src\\main\\java\\de\\ugoe\\cs\\smartshark\\mutaSHARK\\testclasses\\from\\ClassA.java";
         String classATo = "C:\\Users\\Eike\\OneDrive\\Documents\\Ausbildung\\Uni\\1919\\Masterarbeit\\Projekt\\Code\\mutaSHARK\\src\\main\\java\\de\\ugoe\\cs\\smartshark\\mutaSHARK\\testclasses\\to\\ClassA.java";
         com.github.gumtreediff.client.Run.initGenerators();
