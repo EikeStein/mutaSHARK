@@ -6,23 +6,22 @@ import java.util.List;
 public class SearchPath
 {
     public final List<SearchEdge> edges = new ArrayList<>();
+    public final double totalCost;
 
     public SearchPath(SearchNode finalNode)
     {
-        SearchEdge edge = finalNode.getEdgeToPreviousNode();
-        while (edge != null)
+        SearchNode currentNode = finalNode;
+        while (currentNode != null)
         {
-            edges.add(0, edge);
-            SearchNode fromSearchNode = edge.getFromSearchNode();
-            if (fromSearchNode != null)
-                edge = fromSearchNode.getEdgeToPreviousNode();
-            else
-                edge = null;
+            SearchNode previousSearchNode = currentNode.getPreviousSearchNode();
+            if (previousSearchNode == null)
+            {
+                currentNode = null;
+                continue;
+            }
+            edges.add(0, new SearchEdge(previousSearchNode, currentNode.getCostToPrevious(), currentNode));
+            currentNode = previousSearchNode;
         }
-    }
-
-    public double getTotalCost()
-    {
-        return edges.stream().mapToDouble(SearchEdge::getCost).sum();
+        totalCost = finalNode.getTotalCost();
     }
 }

@@ -4,7 +4,7 @@ import java.util.List;
 
 public class SearchResult
 {
-    private final List<SearchPath> foundPaths;
+    public final List<SearchPath> foundPaths;
 
     public SearchResult(List<SearchPath> foundPaths)
     {

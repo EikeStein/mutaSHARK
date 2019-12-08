@@ -1,31 +1,42 @@
 package de.ugoe.cs.smartshark.mutaSHARK.util;
 
+import de.ugoe.cs.smartshark.mutaSHARK.util.mutators.TreeMutationOperator;
+
 import java.util.Objects;
 
 public class SearchNode
 {
     private final TreeNode currentTreeNode;
-    private final SearchEdge edgeToPreviousNode;
+    private final SearchNode previousSearchNode;
+    private final double costToPrevious;
+    private final TreeMutationOperator mutationOperator;
     private final HeuristicBase heuristic;
 
     private Double heuristicCost;
 
-    public SearchNode(TreeNode currentTreeNode, SearchEdge edgeToPreviousNode, HeuristicBase heuristic)
+    public SearchNode(TreeNode currentTreeNode, SearchNode previousSearchNode, double costToPrevious, TreeMutationOperator mutationOperator, HeuristicBase heuristic)
     {
         this.currentTreeNode = currentTreeNode;
-        this.edgeToPreviousNode = edgeToPreviousNode;
+        this.previousSearchNode = previousSearchNode;
+        this.costToPrevious = costToPrevious;
+        this.mutationOperator = mutationOperator;
         this.heuristic = heuristic;
-        edgeToPreviousNode.setToSearchNode(this);
+    }
+
+
+    public double getCostToPrevious()
+    {
+        return costToPrevious;
+    }
+
+    public SearchNode getPreviousSearchNode()
+    {
+        return previousSearchNode;
     }
 
     public double getTotalCost()
     {
         return getPreviousCost() + getHeuristicCost();
-    }
-
-    public SearchEdge getEdgeToPreviousNode()
-    {
-        return edgeToPreviousNode;
     }
 
     public TreeNode getCurrentTreeNode()
@@ -35,10 +46,9 @@ public class SearchNode
 
     private double getPreviousCost()
     {
-        double cost = edgeToPreviousNode.getCost();
-        SearchNode fromSearchNode = edgeToPreviousNode.getFromSearchNode();
-        if (fromSearchNode != null)
-            cost += fromSearchNode.getPreviousCost();
+        double cost = costToPrevious;
+        if (previousSearchNode != null)
+            cost += previousSearchNode.getPreviousCost();
         return cost;
     }
 
@@ -71,12 +81,17 @@ public class SearchNode
         while (current != null)
         {
             count++;
-            SearchEdge edgeToPreviousNode = current.getEdgeToPreviousNode();
-            if (edgeToPreviousNode != null)
-                current = edgeToPreviousNode.getFromSearchNode();
+            SearchNode previousTreeNode = current.getPreviousSearchNode();
+            if (previousTreeNode != null)
+                current = previousTreeNode.getPreviousSearchNode();
             else
                 current = null;
         }
         return count;
+    }
+
+    public TreeMutationOperator getMutationOperator()
+    {
+        return mutationOperator;
     }
 }

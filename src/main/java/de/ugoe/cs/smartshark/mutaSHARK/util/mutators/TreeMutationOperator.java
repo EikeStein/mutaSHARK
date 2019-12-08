@@ -1,5 +1,6 @@
 package de.ugoe.cs.smartshark.mutaSHARK.util.mutators;
 
+import com.github.gumtreediff.actions.model.Action;
 import de.ugoe.cs.smartshark.mutaSHARK.util.TreeNode;
 
 import java.util.List;
@@ -7,11 +8,13 @@ import java.util.List;
 public abstract class TreeMutationOperator
 {
 
-    public abstract List<TreeNode> getPossibleMutations(TreeNode treeNode, TreeNode target);
+    public abstract List<TreeNode> getPossibleMutations(TreeNode treeNode, TreeNode target, List<Action> actions);
 
     public abstract String getSourceName();
 
-    public abstract MutatorType getMutatorType();
-
+    public double getCost()
+    {
+        return 1.0;
+    }
 }
 

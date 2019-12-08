@@ -1,58 +1,52 @@
 package de.ugoe.cs.smartshark.mutaSHARK;
 
-import com.github.gumtreediff.actions.EditScript;
-import com.github.gumtreediff.actions.SimplifiedChawatheScriptGenerator;
-import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.gen.Generators;
-import com.github.gumtreediff.matchers.Mapping;
-import com.github.gumtreediff.matchers.MappingStore;
-import com.github.gumtreediff.matchers.Matcher;
-import com.github.gumtreediff.matchers.Matchers;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeContext;
-import com.github.gumtreediff.tree.TreeUtils;
 import de.ugoe.cs.smartshark.mutaSHARK.util.*;
-import de.ugoe.cs.smartshark.mutaSHARK.util.defects4j.Defects4JLoader;
-import de.ugoe.cs.smartshark.mutaSHARK.util.defects4j.Defects4JProjectName;
 import de.ugoe.cs.smartshark.mutaSHARK.util.mutators.TreeMutationOperator;
-import de.ugoe.cs.smartshark.mutaSHARK.util.mutators.arithmetic.ArithmeticOperatorInsertionShortCutMutator;
+import de.ugoe.cs.smartshark.mutaSHARK.util.mutators.mujava.arithmetic.ArithmeticOperatorInsertionShortCutMutator;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class MutaShark
 {
-    public static void main(String[] args) throws Exception
+    private static SearchResult searchResult;
+
+    // -b|-bug path/to/bug.java -f|-fix path/to/fix.java -m|-mutator full.name.of.mutator1 full.name.of.mutator2 ...
+    // path/to/bug.java path/to/fix.java  full.name.of.mutator1 full.name.of.mutator2 ...
+    // path/to/bug.java path/to/fix.java (in this case all mutatations in package util.mutators are used)
+    public static void main(String[] args) throws InstantiationException, IllegalAccessException, ClassNotFoundException, IOException
     {
-        new Defects4JLoader().LoadAll();
+        searchResult = null;
+        StartUpOptions startUpOptions = StartUpOptions.parseArgs(args);
+        System.out.println("Test");
 
-        String classAFrom = "C:\\Users\\Eike\\OneDrive\\Documents\\Ausbildung\\Uni\\1919\\Masterarbeit\\Projekt\\Code\\mutaSHARK\\src\\main\\java\\de\\ugoe\\cs\\smartshark\\mutaSHARK\\testclasses\\from\\ClassA.java";
-        String classATo = "C:\\Users\\Eike\\OneDrive\\Documents\\Ausbildung\\Uni\\1919\\Masterarbeit\\Projekt\\Code\\mutaSHARK\\src\\main\\java\\de\\ugoe\\cs\\smartshark\\mutaSHARK\\testclasses\\to\\ClassA.java";
+
         com.github.gumtreediff.client.Run.initGenerators();
-        TreeContext treeFrom = Generators.getInstance().getTree(classAFrom);
-        TreeContext treeTo = Generators.getInstance().getTree(classATo);
+        TreeContext treeFrom = Generators.getInstance().getTree(startUpOptions.pathToBug);
+        TreeContext treeTo = Generators.getInstance().getTree(startUpOptions.pathToFix);
 
-        ITree fromRoot = TreeHelper.updateTree(TreeHelper.findMethods(treeFrom.getRoot()).get(0));
-        ITree toRoot = TreeHelper.updateTree(TreeHelper.findMethods(treeTo.getRoot()).get(0));
-        TreeHelper.updateTree(toRoot);
-
-        ArithmeticOperatorInsertionShortCutMutator mutator = new ArithmeticOperatorInsertionShortCutMutator();
-
-        TreeNode toNode = new TreeNode(toRoot);
-        TreeNode fromNode = new TreeNode(fromRoot);
+        TreeNode toNode = new TreeNode(TreeHelper.updateTree(treeTo.getRoot()));
+        TreeNode fromNode = new TreeNode(TreeHelper.updateTree(treeFrom.getRoot()));
         AStarSearch aStarSearch = new AStarSearch(fromNode, toNode);
-        ArrayList<TreeMutationOperator> mutationOperators = new ArrayList<>();
-        mutationOperators.add(new ArithmeticOperatorInsertionShortCutMutator());
-        SearchResult paths = aStarSearch.findPaths(new SearchSettings(1, 3, toNode, mutationOperators));
 
-        List<TreeNode> possibleMutations = mutator.getPossibleMutations(fromNode, toNode);
-        for (TreeNode possibleMutation : possibleMutations)
+        searchResult = aStarSearch.findPaths(new SearchSettings(5, 5, toNode, Arrays.asList(startUpOptions.mutations)));
+
+        for (SearchPath foundPath : searchResult.foundPaths)
         {
-            if (possibleMutation.getTree().isIsomorphicTo(toRoot))
-            {
-                String treeString = possibleMutation.getTree().toTreeString();
-                System.out.println(treeString);
-            }
+            List<TreeMutationOperator> mutators = foundPath.edges.stream().map(e -> e.getToSearchNode().getMutationOperator()).collect(Collectors.toList());
+            System.out.println(mutators);
         }
+    }
+
+
+    public static SearchResult getSearchResult()
+    {
+        return searchResult;
     }
 }

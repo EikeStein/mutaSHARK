@@ -24,6 +24,9 @@ dependencies {
     compile "commons-cli:commons-cli:1.4"
     compile "ch.qos.logback:logback-classic:1.2.3"
 
+    // https://github.com/ronmamo/reflections
+    compile "org.reflections:reflections:0.9.11"
+
     // Smartshark Data-Models 
     compile 'io.github.smartshark:jSHARK:2.0.3'
     compile 'org.mongodb.morphia:morphia:1.3.2'

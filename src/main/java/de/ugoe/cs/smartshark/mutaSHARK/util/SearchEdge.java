@@ -3,19 +3,14 @@ package de.ugoe.cs.smartshark.mutaSHARK.util;
 public class SearchEdge
 {
     private final SearchNode fromSearchNode;
-    private SearchNode toSearchNode;
+    private final SearchNode toSearchNode;
     private final double cost;
 
-    public SearchEdge(SearchNode fromSearchNode, double cost)
+    public SearchEdge(SearchNode fromSearchNode, double cost, SearchNode toSearchNode)
     {
         this.fromSearchNode = fromSearchNode;
         this.cost = cost;
-    }
-
-    public void setToSearchNode(SearchNode searchNode)
-    {
-        if (toSearchNode != null)
-            toSearchNode = searchNode;
+        this.toSearchNode = toSearchNode;
     }
 
     public SearchNode getToSearchNode()

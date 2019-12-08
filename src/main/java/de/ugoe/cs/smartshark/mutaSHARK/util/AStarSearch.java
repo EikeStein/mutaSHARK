@@ -1,5 +1,7 @@
 package de.ugoe.cs.smartshark.mutaSHARK.util;
 
+import com.github.gumtreediff.actions.EditScript;
+import com.github.gumtreediff.actions.model.Action;
 import de.ugoe.cs.smartshark.mutaSHARK.util.mutators.TreeMutationOperator;
 
 import java.util.ArrayList;
@@ -25,13 +27,13 @@ public class AStarSearch
         openList.clear();
         closedList.clear();
 
-        SearchNode searchNode = new SearchNode(fromNode, new SearchEdge(null, 0), searchSettings.heuristic);
+        SearchNode searchNode = new SearchNode(fromNode, null, 0, null, searchSettings.heuristic);
         openList.enqueue(searchNode);
 
         while (openList.getSize() > 0 && foundPaths.size() < searchSettings.maxFoundPaths)
         {
             SearchNode currentNode = openList.dequeue();
-            if (currentNode.getCurrentTreeNode().equals(toNode))
+            if (currentNode.getCurrentTreeNode().getTree().isIsomorphicTo(toNode.getTree()))
             {
                 foundPaths.add(new SearchPath(currentNode));
             }
@@ -47,31 +49,33 @@ public class AStarSearch
     private void expandNode(SearchNode searchNode, SearchSettings searchSettings)
     {
         TreeNode treeNode = searchNode.getCurrentTreeNode();
-        if(searchNode.getTotalHopCount()>=searchSettings.maxHops)
-            return;
-        for (TreeMutationOperator mutationOperator :
-                searchSettings.mutationOperators)
+        List<Action> actions = new DiffTree(treeNode.getTree(), toNode.getTree()).getActions();
+        if (searchNode.getTotalHopCount() >= searchSettings.maxHops)
         {
-            List<TreeNode> possibleMutations = mutationOperator.getPossibleMutations(treeNode, toNode);
-            for (TreeNode newNode :
-                    possibleMutations)
+            return;
+        }
+        for (TreeMutationOperator mutationOperator : searchSettings.mutationOperators)
+        {
+            List<TreeNode> possibleMutations = mutationOperator.getPossibleMutations(treeNode, toNode, actions);
+            for (TreeNode newNode : possibleMutations)
             {
                 if (closedList.stream().anyMatch(n -> n.getCurrentTreeNode().equals(newNode)))
+                {
                     continue;
+                }
 
-                SearchEdge searchEdge = new SearchEdge(searchNode, 1);
-                SearchNode successor = new SearchNode(newNode, searchEdge, searchSettings.heuristic);
-                searchEdge.setToSearchNode(successor);
-                double tentativeTotalCost = searchNode.getTotalCost() + searchEdge.getCost();
+                SearchNode newSearchNode = new SearchNode(newNode, searchNode, mutationOperator.getCost(), mutationOperator, searchSettings.heuristic);
                 if (openList.find(newNode) != null)
                 {
-                    if (tentativeTotalCost >= openList.find(newNode).getTotalCost())
+                    if (newSearchNode.getTotalCost() >= openList.find(newNode).getTotalCost())
+                    {
                         continue;
-                    openList.replace(openList.find(newNode), successor);
+                    }
+                    openList.replace(openList.find(newNode), newSearchNode);
                 }
                 else
                 {
-                    openList.enqueue(successor);
+                    openList.enqueue(newSearchNode);
                 }
 
             }
