@@ -2,9 +2,8 @@ package de.ugoe.cs.smartshark.mutaSHARK.util.mutators.pitest;
 
 import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.tree.ITree;
-import de.ugoe.cs.smartshark.mutaSHARK.util.ActionExecutor;
-import de.ugoe.cs.smartshark.mutaSHARK.util.Replace;
-import de.ugoe.cs.smartshark.mutaSHARK.util.TreeNode;
+import de.ugoe.cs.smartshark.mutaSHARK.util.*;
+import de.ugoe.cs.smartshark.mutaSHARK.util.mutators.MutatedNode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,11 +11,15 @@ import java.util.List;
 public class RenameMutator extends PitestMutator
 {
     @Override
-    public List<TreeNode> getPossibleMutations(TreeNode treeNode, TreeNode target, List<Action> actions)
+    public List<MutatedNode> getPossibleMutations(TreeNode treeNode, TreeNode target)
     {
-        ArrayList<TreeNode> results = new ArrayList<>();
-        for (Action action : actions)
+        treeNode = new TreeNode(treeNode.getTree().deepCopy());
+        target = new TreeNode(target.getTree().deepCopy());
+        List<Action> actions = new DiffTree(treeNode.getTree(), target.getTree()).getActions();
+        ArrayList<MutatedNode> results = new ArrayList<>();
+        for (int i = 0; i < actions.size(); i++)
         {
+            Action action = actions.get(i);
             if (action instanceof Replace)
             {
                 Replace replace = (Replace) action;
@@ -30,8 +33,12 @@ public class RenameMutator extends PitestMutator
                         if (!originalLabel.equals(label))
                         {
                             ActionExecutor actionExecutor = new ActionExecutor();
-                            ITree newTree = actionExecutor.executeAction(treeNode.getTree(), replace);
-                            results.add(new TreeNode(newTree));
+                            actionExecutor.executeAction(replace);
+                            ITree newTree = replace.getOriginalNode().getParents().stream().filter(t -> t.getParent() == null).findFirst().get();
+                            results.add(new MutatedNode(new TreeNode(newTree), this, 10, "Cheated-rename: " + originalLabel + " -> " + label));
+                            treeNode = new TreeNode(newTree.deepCopy());
+                            target = new TreeNode(target.getTree().deepCopy());
+                            actions = new DiffTree(treeNode.getTree(), target.getTree()).getActions();
                         }
                     }
                 }
@@ -41,3 +48,4 @@ public class RenameMutator extends PitestMutator
         return results;
     }
 }
+

@@ -1,5 +1,6 @@
 package de.ugoe.cs.smartshark.mutaSHARK.util;
 
+import com.github.gumtreediff.tree.FakeTree;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeUtils;
 
@@ -98,7 +99,7 @@ public class TreeHelper
     {
         String url = "";
         int level = 0;
-        while (tree.getParent() != null && level < maxLevels)
+        while (tree.getParent() != null && level < maxLevels && !(tree.getParent() instanceof FakeTree))
         {
             int childPosition = getChildPosition(tree.getParent(), tree);
             tree = tree.getParent();
@@ -123,7 +124,7 @@ public class TreeHelper
         return -1;
     }
 
-    public static boolean urlEqual(ITree node1, ITree node2, boolean removeLeadingZeros, int removeTopMostCount)
+    public static boolean urlEqual(ITree node1, ITree node2, boolean removeLeadingZeros)
     {
         String url1 = getUrl(node1, Integer.MAX_VALUE);
         String url2 = getUrl(node2, Integer.MAX_VALUE);
@@ -140,26 +141,6 @@ public class TreeHelper
             }
         }
 
-        for (int i = 0; i < removeTopMostCount && false; i++)
-        {
-            if (url1.length() >= 1)
-            {
-                url1 = url1.substring(1);
-                if (url1.startsWith("."))
-                {
-                    url1 = url1.substring(1);
-                }
-            }
-            if (url2.length() >= 1)
-            {
-                url2 = url2.substring(1);
-                if (url2.startsWith("."))
-                {
-                    url2 = url2.substring(1);
-                }
-            }
-        }
-
         return url1.equalsIgnoreCase(url2);
     }
 
@@ -168,11 +149,28 @@ public class TreeHelper
         ArrayList<ITree> results = new ArrayList<>();
         for (ITree candidate : tree.breadthFirst())
         {
-            if (candidate.getType().name.equalsIgnoreCase("TYPE_DECLARATION_KIND") && candidate.getLabel().equalsIgnoreCase(declaration))
+            if (candidate.getType().name.equalsIgnoreCase("TYPE_DECLARATION_KIND") && candidate.getLabel().contains(declaration))
             {
                 results.add(candidate.getParent());
             }
         }
         return results;
+    }
+
+    public static List<ITree> findNodes(ITree tree, String typeName, int maxDepth)
+    {
+        ArrayList<ITree> result = new ArrayList<>();
+        for (ITree child : tree.getChildren())
+        {
+            if (child.getType().name.equals(typeName))
+            {
+                result.add(child);
+            }
+            if (maxDepth > 0)
+            {
+                result.addAll(findNodes(child, typeName, maxDepth - 1));
+            }
+        }
+        return result;
     }
 }

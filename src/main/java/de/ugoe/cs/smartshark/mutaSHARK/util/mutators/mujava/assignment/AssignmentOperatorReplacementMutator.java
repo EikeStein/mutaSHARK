@@ -8,5 +8,4 @@ import java.util.List;
 
 public abstract class AssignmentOperatorReplacementMutator extends MujavaMutator
 {
-    public abstract List<TreeNode> getPossibleMutations(TreeNode treeNode, TreeNode target);
 }

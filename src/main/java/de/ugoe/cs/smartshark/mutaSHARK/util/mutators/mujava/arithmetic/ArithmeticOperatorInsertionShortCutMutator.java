@@ -5,6 +5,7 @@ import com.github.gumtreediff.tree.ITree;
 import de.ugoe.cs.smartshark.mutaSHARK.util.TreeHelper;
 import de.ugoe.cs.smartshark.mutaSHARK.util.TreeNode;
 import de.ugoe.cs.smartshark.mutaSHARK.util.expressions.*;
+import de.ugoe.cs.smartshark.mutaSHARK.util.mutators.MutatedNode;
 import de.ugoe.cs.smartshark.mutaSHARK.util.mutators.MutatorType;
 
 import java.util.ArrayList;
@@ -15,10 +16,10 @@ public class ArithmeticOperatorInsertionShortCutMutator extends ArithmeticOperat
 {
 
     @Override
-    public List<TreeNode> getPossibleMutations(TreeNode treeNode, TreeNode target, List<Action> actions)
+    public List<MutatedNode> getPossibleMutations(TreeNode treeNode, TreeNode target)
     {
         List<String> names = TreeHelper.getNames(target.getTree()).stream().distinct().collect(Collectors.toList());
-        List<TreeNode> result = new ArrayList<>();
+        List<MutatedNode> result = new ArrayList<>();
         for (String name : names)
         {
             result.addAll(getPossiblePrefixExpressions(treeNode, target, new ExpressionStatement(new PrefixExpression(new DecrementPrefixExpressionOperatorExpression(), new SimpleNameExpression(name)))));
@@ -30,9 +31,11 @@ public class ArithmeticOperatorInsertionShortCutMutator extends ArithmeticOperat
         return result;
     }
 
-    private List<TreeNode> getPossiblePrefixExpressions(TreeNode treeNode, TreeNode target, ExpressionStatement expressionStatement)
+    private List<MutatedNode> getPossiblePrefixExpressions(TreeNode treeNode,
+                                                           TreeNode target,
+                                                           ExpressionStatement expressionStatement)
     {
-        List<TreeNode> result = new ArrayList<>();
+        List<MutatedNode> result = new ArrayList<>();
 
         List<ITree> statements = TreeHelper.findStatements(treeNode.getTree());
         for (int i = 0; i < statements.size() + 1; i++)
@@ -48,7 +51,7 @@ public class ArithmeticOperatorInsertionShortCutMutator extends ArithmeticOperat
                 String url = TreeHelper.getUrl(current, depth);
                 ITree parent = clonedTree.getChild(url);
                 expressionStatement.insertTree(parent, statementPos);
-                result.add(new TreeNode(clonedTree));
+                result.add(new MutatedNode(new TreeNode(clonedTree),this, 1, expressionStatement.toString()));
                 String treeString = clonedTree.toTreeString();
                 System.out.println(treeString);
             }

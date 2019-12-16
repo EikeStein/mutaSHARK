@@ -3,6 +3,7 @@ package de.ugoe.cs.smartshark.mutaSHARK.util;
 import com.github.gumtreediff.actions.model.*;
 import com.github.gumtreediff.tree.ITree;
 import de.ugoe.cs.smartshark.mutaSHARK.util.defects4j.Defects4JBugFix;
+import org.apache.commons.lang3.NotImplementedException;
 
 import java.util.ArrayList;
 
@@ -13,77 +14,121 @@ public class ActionExecutor
     }
 
 
-    public ITree executeAction(ITree originalTree, Action action)
+    public void executeAction(Action action)
     {
-        ITree copy = originalTree.deepCopy();
         if (action instanceof Insert)
         {
-            return executeInsert(copy, (Insert) action);
+            executeInsert((Insert) action);
         }
-        if (action instanceof Addition)
+        else if (action instanceof Addition)
         {
-            return executeAddition(copy, (Addition) action);
+            executeAddition((Addition) action);
         }
-        if (action instanceof Move)
+        else if (action instanceof Move)
         {
-            return executeMove(copy, (Move) action);
+            executeMove((Move) action);
         }
-        if (action instanceof Update)
+        else if (action instanceof Update)
         {
-            return executeUpdate(copy, (Update) action);
+            executeUpdate((Update) action);
         }
-        if (action instanceof Delete)
+        else if (action instanceof Delete)
         {
-            return executeDelete(copy, (Delete) action);
+            executeDelete((Delete) action);
         }
-        if (action instanceof Replace)
+        else if (action instanceof Replace)
         {
-            return executeReplace(copy, (Replace) action);
+            executeReplace((Replace) action);
         }
-        throw new UnsupportedOperationException("The action " + action.getName() + " is unsupported");
+        else
+        {
+            throw new UnsupportedOperationException("The action " + action.getName() + " is unsupported");
+        }
     }
 
-    private ITree executeReplace(ITree copy, Replace action)
+    private void executeReplace(Replace action)
     {
-        String url = TreeHelper.getUrl(action.getOriginalNode(), Integer.MAX_VALUE);
-        ITree child = copy.getChild(url);
-        ITree parent = child.getParent();
+        ITree parent = action.getOriginalNode().getParent();
+        assert parent == action.getNewNode().getParent();
         ArrayList<ITree> newChildren = new ArrayList<>(parent.getChildren());
+
         for (int i = 0; i < newChildren.size(); i++)
         {
             ITree oldChild = newChildren.get(i);
-            if (oldChild.equals(child))
+            if (oldChild == action.getOriginalNode())
             {
                 newChildren.remove(oldChild);
-                newChildren.add(i, action.getNewNode().deepCopy());
+                newChildren.add(i, action.getNewNode());
             }
         }
         parent.setChildren(newChildren);
-        return copy;
     }
 
-    private ITree executeDelete(ITree copy, Delete action)
+    private void executeDelete(Delete action)
     {
-        return null;
+        TreeNode parent = new TreeNode(action.getNode().getParent());
+        parent.removeChild(action.getNode());
     }
 
-    private ITree executeUpdate(ITree copy, Update action)
+    private void executeUpdate(Update action)
     {
-        return null;
+        throw new NotImplementedException("executeUpdate not implemented for " + action);
     }
 
-    private ITree executeMove(ITree copy, Move action)
+    private void executeMove(Move action)
     {
-        return null;
+        TreeNode treeNode = new TreeNode(action.getNode().getParent());
+        treeNode.removeChild(action.getNode());
+        action.getParent().insertChild(action.getNode(), action.getPosition());
     }
 
-    private ITree executeAddition(ITree copy, Addition action)
+    private void executeAddition(Addition action)
     {
-        return null;
+        throw new NotImplementedException("executeUpdate not implemented for " + action);
     }
 
-    private ITree executeInsert(ITree copy, Insert action)
+    private void executeInsert(Insert action)
     {
-        return null;
+        ITree node = action.getNode();
+        action.getParent().insertChild(node, action.getPosition());
+    }
+
+    public Move reassignTree(Move move, ITree clonedTree)
+    {
+        ITree originalParent = move.getParent();
+        ITree originalNode = move.getNode();
+        String originalParentUrl = TreeHelper.getUrl(originalParent, Integer.MAX_VALUE);
+        String originalNodeUrl = TreeHelper.getUrl(originalNode, Integer.MAX_VALUE);
+        ITree newParent = clonedTree.getChild(originalParentUrl);
+        ITree newNode = clonedTree.getChild(originalNodeUrl);
+        return new Move(newNode, newParent, move.getPosition());
+    }
+
+    public Replace reassignTree(Replace replace, ITree clonedTree)
+    {
+        ITree originalOriginalNode = replace.getOriginalNode();
+        ITree originalNewNode = replace.getNewNode();
+        String originalOriginalNodeUrl = TreeHelper.getUrl(originalOriginalNode, Integer.MAX_VALUE);
+        String originalNewNodeUrl = TreeHelper.getUrl(originalNewNode, Integer.MAX_VALUE);
+        ITree newOriginalNode = clonedTree.getChild(originalOriginalNodeUrl);
+        ITree newNewNode = clonedTree.getChild(originalNewNodeUrl);
+        return new Replace(newOriginalNode, newNewNode);
+    }
+
+    public Delete reassignTree(Delete delete, ITree clonedTree)
+    {
+        ITree originalNode = delete.getNode();
+        String originalNodeUrl = TreeHelper.getUrl(originalNode, Integer.MAX_VALUE);
+        ITree newNode = clonedTree.getChild(originalNodeUrl);
+        return new Delete(newNode);
+    }
+
+    public Insert reassignTree(Insert insert, ITree clonedTree)
+    {
+        ITree originalParent = insert.getParent();
+        ITree originalNode = insert.getNode().deepCopy();
+        String originalParentUrl = TreeHelper.getUrl(originalParent, Integer.MAX_VALUE);
+        ITree newParent = clonedTree.getChild(originalParentUrl);
+        return new Insert(originalNode, newParent, insert.getPosition());
     }
 }

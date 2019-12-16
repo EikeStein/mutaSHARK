@@ -1,13 +1,12 @@
 package de.ugoe.cs.smartshark.mutaSHARK.util;
 
-import com.github.gumtreediff.actions.AllNodesClassifier;
-import com.github.gumtreediff.actions.ChawatheScriptGenerator;
-import com.github.gumtreediff.actions.EditScript;
-import com.github.gumtreediff.actions.InsertDeleteChawatheScriptGenerator;
+import com.github.gumtreediff.actions.*;
 import com.github.gumtreediff.actions.model.*;
+import com.github.gumtreediff.matchers.Mapping;
 import com.github.gumtreediff.matchers.MappingStore;
 import com.github.gumtreediff.matchers.Matcher;
 import com.github.gumtreediff.matchers.heuristic.LcsMatcher;
+import com.github.gumtreediff.tree.FakeTree;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeUtils;
 import com.github.gumtreediff.utils.SequenceAlgorithms;
@@ -72,8 +71,10 @@ public class DiffTree
 
     private void classify(ITree treeFrom, ITree treeTo)
     {
-        ChawatheScriptGenerator chawatheScriptGenerator = new ChawatheScriptGenerator();
-        MappingStore mappings = match(treeFrom, treeTo, new MappingStore(treeFrom, treeTo));
+        EditScriptGenerator chawatheScriptGenerator = new ActionScriptGenerator();
+        ITree toClone = treeTo.deepCopy();
+        ITree fromClone = treeFrom.deepCopy();
+        MappingStore mappings = match(fromClone, toClone, new MappingStore(fromClone, toClone));
         actions = chawatheScriptGenerator.computeActions(mappings).asList();
         cleanUp(actions);
 
@@ -120,7 +121,7 @@ public class DiffTree
             if (action instanceof Insert)
             {
                 Insert insert = (Insert) action;
-                Optional<Action> deleteAction = actions.stream().filter(a -> a instanceof Delete && TreeHelper.urlEqual(a.getNode(), insert.getNode(), true, 1)).findAny();
+                Optional<Action> deleteAction = actions.stream().filter(a -> a instanceof Delete && TreeHelper.urlEqual(a.getNode(), insert.getNode(), true)).findAny();
                 if (deleteAction.isPresent())
                 {
                     actions.remove(insert);

@@ -19,4 +19,10 @@ public class ExpressionStatement extends Expression
     {
         return "";
     }
+
+    @Override
+    public String toString()
+    {
+        return "ExpressionStatement: " + getTypeName() + " " + getLabel();
+    }
 }

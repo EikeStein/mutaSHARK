@@ -2,11 +2,8 @@ package de.ugoe.cs.smartshark.mutaSHARK.testclasses.from;
 
 public class ClassA
 {
-    public void methodA()
+    public void methodA(int i)
     {
-        if (1 < 2)
-        {
-
-        }
+        i = 2;
     }
 }

@@ -28,22 +28,54 @@ public class MutaShark
 
 
         com.github.gumtreediff.client.Run.initGenerators();
-        TreeContext treeFrom = Generators.getInstance().getTree(startUpOptions.pathToBug);
-        TreeContext treeTo = Generators.getInstance().getTree(startUpOptions.pathToFix);
+        TreeContext treeFrom = Generators.getInstance().getTree(startUpOptions.pathToFix);
+        TreeContext treeTo = Generators.getInstance().getTree(startUpOptions.pathToBug);
 
-        TreeNode toNode = new TreeNode(TreeHelper.updateTree(treeTo.getRoot()));
-        TreeNode fromNode = new TreeNode(TreeHelper.updateTree(treeFrom.getRoot()));
+
+        TreeNode toNode = getCleanedUpTree(treeTo); // new TreeNode(TreeHelper.updateTree(treeTo.getRoot()));
+        TreeNode fromNode = getCleanedUpTree(treeFrom); // new TreeNode(TreeHelper.updateTree(treeTo.getRoot()));
         AStarSearch aStarSearch = new AStarSearch(fromNode, toNode);
 
         searchResult = aStarSearch.findPaths(new SearchSettings(5, 5, toNode, Arrays.asList(startUpOptions.mutations)));
 
-        for (SearchPath foundPath : searchResult.foundPaths)
+        if (searchResult.foundPaths.size() == 0)
         {
-            List<TreeMutationOperator> mutators = foundPath.edges.stream().map(e -> e.getToSearchNode().getMutationOperator()).collect(Collectors.toList());
-            System.out.println(mutators);
+            for (SearchPath foundPath : searchResult.closestPaths)
+            {
+                List<TreeNode> mutators = foundPath.edges.stream().map(e -> e.getToSearchNode().getCurrentTreeNode()).collect(Collectors.toList());
+                System.out.println(mutators);
+            }
+        }
+        else
+        {
+            for (SearchPath foundPath : searchResult.foundPaths)
+            {
+                List<TreeNode> mutators = foundPath.edges.stream().map(e -> e.getToSearchNode().getCurrentTreeNode()).collect(Collectors.toList());
+                System.out.println(mutators);
+            }
         }
     }
 
+    private static TreeNode getCleanedUpTree(TreeContext treeContext)
+    {
+        ITree tree = TreeHelper.updateTree(treeContext.getRoot());
+        TreeNode treeNode = new TreeNode(tree);
+        removeNodes(tree, "PackageDeclaration", 1);
+        removeNodes(tree, "ImportDeclaration", 1);
+        removeNodes(tree, "Javadoc", Integer.MAX_VALUE);
+        TreeHelper.updateTree(treeNode.getTree());
+        return treeNode;
+    }
+
+    private static void removeNodes(ITree tree, String nodeName, int maxDepth)
+    {
+        List<ITree> nodes = TreeHelper.findNodes(tree, nodeName, maxDepth);
+        for (ITree node : nodes)
+        {
+            TreeNode parent = new TreeNode(node.getParent());
+            parent.removeChild(node);
+        }
+    }
 
     public static SearchResult getSearchResult()
     {

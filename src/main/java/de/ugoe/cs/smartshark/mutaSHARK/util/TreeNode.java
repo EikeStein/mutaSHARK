@@ -11,13 +11,20 @@ public class TreeNode
 
     public TreeNode(ITree tree)
     {
-
         this.tree = tree;
     }
 
     public ITree getTree()
     {
         return tree;
+    }
+
+    public void removeChild(ITree tree)
+    {
+        ArrayList<ITree> children = new ArrayList<>(this.tree.getChildren());
+        children.remove(tree);
+        tree.setParent(null);
+        this.tree.setChildren(children);
     }
 }
 

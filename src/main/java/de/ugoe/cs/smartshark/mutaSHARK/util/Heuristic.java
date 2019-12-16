@@ -14,6 +14,13 @@ public class Heuristic extends HeuristicBase
     @Override
     protected double getHeuristicInternal(TreeNode fromNode)
     {
-        return 0;
+        int actionCount = new DiffTree(fromNode.getTree(), destinationNode.getTree()).getActions().size();
+
+        double e = Math.exp(actionCount / 4.0);
+        double result = e / (e + 1);
+        result = result - 0.5;
+        result = result * 2;
+
+        return result;
     }
 }

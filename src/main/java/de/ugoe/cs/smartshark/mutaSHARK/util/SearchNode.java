@@ -1,5 +1,6 @@
 package de.ugoe.cs.smartshark.mutaSHARK.util;
 
+import de.ugoe.cs.smartshark.mutaSHARK.util.mutators.MutatedNode;
 import de.ugoe.cs.smartshark.mutaSHARK.util.mutators.TreeMutationOperator;
 
 import java.util.Objects;
@@ -14,15 +15,23 @@ public class SearchNode
 
     private Double heuristicCost;
 
-    public SearchNode(TreeNode currentTreeNode, SearchNode previousSearchNode, double costToPrevious, TreeMutationOperator mutationOperator, HeuristicBase heuristic)
+    public SearchNode(TreeNode currentTreeNode, HeuristicBase heuristic)
     {
         this.currentTreeNode = currentTreeNode;
-        this.previousSearchNode = previousSearchNode;
-        this.costToPrevious = costToPrevious;
-        this.mutationOperator = mutationOperator;
+        this.previousSearchNode = null;
+        this.costToPrevious = 0;
+        this.mutationOperator = null;
         this.heuristic = heuristic;
     }
 
+    public SearchNode(MutatedNode mutatedNode, SearchNode previousSearchNode, HeuristicBase heuristic)
+    {
+        this.currentTreeNode = mutatedNode;
+        this.previousSearchNode = previousSearchNode;
+        this.costToPrevious = mutatedNode.getCost();
+        this.mutationOperator = mutatedNode.getMutationOperator();
+        this.heuristic = heuristic;
+    }
 
     public double getCostToPrevious()
     {
@@ -67,7 +76,7 @@ public class SearchNode
         return Objects.hash(currentTreeNode);
     }
 
-    private double getHeuristicCost()
+    public double getHeuristicCost()
     {
         if (heuristicCost == null)
             heuristicCost = heuristic.getHeuristic(currentTreeNode);
