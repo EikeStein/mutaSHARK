@@ -11,6 +11,9 @@ import java.util.List;
 
 public class AStarSearch
 {
+    public final int maxActions = 10000;
+    public final int maxMutationsPerMutator = 10000;
+    public final int maxOpenListSize = 10000;
     private final TreeNode fromNode;
     private final TreeNode toNode;
 
@@ -23,7 +26,7 @@ public class AStarSearch
         this.toNode = toNode;
     }
 
-    public SearchResult findPaths(SearchSettings searchSettings)
+    public SearchResult findPaths(SearchSettings searchSettings) throws TooManyActionsException
     {
         List<SearchPath> foundPaths = new ArrayList<>();
         openList.clear();
@@ -60,18 +63,24 @@ public class AStarSearch
         return result;
     }
 
-    private void expandNode(SearchNode searchNode, SearchSettings searchSettings)
+    private void expandNode(SearchNode searchNode, SearchSettings searchSettings) throws TooManyActionsException
     {
         TreeNode treeNode = searchNode.getCurrentTreeNode();
         if (searchNode.getTotalHopCount() >= searchSettings.maxHops)
         {
             return;
         }
+        List<Action> actions = new DiffTree(treeNode.getTree(), toNode.getTree(), true).getActions();
+        if (actions.size() > maxActions)
+        {
+            throw new TooManyActionsException(actions.size());
+        }
         for (TreeMutationOperator mutationOperator : searchSettings.mutationOperators)
         {
-            List<MutatedNode> possibleMutations = mutationOperator.getPossibleMutations(treeNode, toNode);
-            for (MutatedNode newNode : possibleMutations)
+            List<MutatedNode> possibleMutations = mutationOperator.getPossibleMutations(treeNode, toNode, actions);
+            for (int i = 0; i < possibleMutations.size() && i < maxMutationsPerMutator; i++)
             {
+                MutatedNode newNode = possibleMutations.get(i);
                 if (closedList.stream().anyMatch(n -> n.getCurrentTreeNode().equals(newNode)))
                 {
                     continue;
@@ -88,7 +97,12 @@ public class AStarSearch
                 }
                 else
                 {
-                    openList.enqueue(newSearchNode);
+                    if (openList.getSize() <= maxOpenListSize)
+                    {
+                        openList.enqueue(newSearchNode);
+                        // SearchNode worstNode = openList.dequeueLast();
+                        // closedList.add(worstNode);
+                    }
                 }
 
             }

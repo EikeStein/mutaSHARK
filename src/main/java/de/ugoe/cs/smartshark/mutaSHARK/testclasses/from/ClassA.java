@@ -2,8 +2,11 @@ package de.ugoe.cs.smartshark.mutaSHARK.testclasses.from;
 
 public class ClassA
 {
-    public void methodA(int i)
+    int b = 1;
+    int h = 1;
+
+    public void methodA(int j)
     {
-        i = 2;
+        b = h - 1;
     }
 }

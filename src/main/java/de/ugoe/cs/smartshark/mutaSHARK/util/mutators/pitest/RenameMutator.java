@@ -1,6 +1,8 @@
 package de.ugoe.cs.smartshark.mutaSHARK.util.mutators.pitest;
 
 import com.github.gumtreediff.actions.model.Action;
+import com.github.gumtreediff.actions.model.Delete;
+import com.github.gumtreediff.actions.model.Insert;
 import com.github.gumtreediff.tree.ITree;
 import de.ugoe.cs.smartshark.mutaSHARK.util.*;
 import de.ugoe.cs.smartshark.mutaSHARK.util.mutators.MutatedNode;
@@ -11,38 +13,40 @@ import java.util.List;
 public class RenameMutator extends PitestMutator
 {
     @Override
-    public List<MutatedNode> getPossibleMutations(TreeNode treeNode, TreeNode target)
+    public List<MutatedNode> getPossibleMutations(TreeNode treeNode, TreeNode target, List<Action> actions)
     {
-        treeNode = new TreeNode(treeNode.getTree().deepCopy());
-        target = new TreeNode(target.getTree().deepCopy());
-        List<Action> actions = new DiffTree(treeNode.getTree(), target.getTree()).getActions();
         ArrayList<MutatedNode> results = new ArrayList<>();
         for (int i = 0; i < actions.size(); i++)
         {
-            Action action = actions.get(i);
-            if (action instanceof Replace)
+            if (actions.get(i) instanceof Insert)
             {
-                Replace replace = (Replace) action;
-                String name = replace.getOriginalNode().getType().name;
-                if (name.equalsIgnoreCase("SimpleName") || name.equalsIgnoreCase("QualifiedName"))
+                Insert insert = (Insert) actions.get(i);
+                if (!insert.getNode().getType().name.equals("SimpleName") && !insert.getNode().getType().name.equals("QualifiedName"))
                 {
-                    if (replace.getNewNode().getType().name.equalsIgnoreCase(name))
+                    continue;
+                }
+                for (int j = 0; j < actions.size(); j++)
+                {
+                    if (actions.get(j) instanceof Delete)
                     {
-                        String originalLabel = replace.getOriginalNode().getLabel();
-                        String label = replace.getNewNode().getLabel();
-                        if (!originalLabel.equals(label))
+                        Delete delete = (Delete) actions.get(j);
+                        if (!delete.getNode().getType().name.equals("SimpleName") && !delete.getNode().getType().name.equals("QualifiedName"))
                         {
-                            ActionExecutor actionExecutor = new ActionExecutor();
-                            actionExecutor.executeAction(replace);
-                            ITree newTree = replace.getOriginalNode().getParents().stream().filter(t -> t.getParent() == null).findFirst().get();
-                            results.add(new MutatedNode(new TreeNode(newTree), this, 10, "Cheated-rename: " + originalLabel + " -> " + label));
-                            treeNode = new TreeNode(newTree.deepCopy());
-                            target = new TreeNode(target.getTree().deepCopy());
-                            actions = new DiffTree(treeNode.getTree(), target.getTree()).getActions();
+                            continue;
                         }
+                        if (delete.getNode().getParent() != insert.getParent())
+                        {
+                            continue;
+                        }
+                        ITree deepCopy = treeNode.getTree().deepCopy();
+                        String url = TreeHelper.getUrl(delete.getNode().getParent(), Integer.MAX_VALUE);
+                        ITree parent = deepCopy.getChild(url);
+                        TreeNode parentNode = new TreeNode(parent);
+                        parentNode.removeChildAt(Math.min(insert.getPosition(), parentNode.getTree().getChildren().size() - 1));
+                        parentNode.getTree().insertChild(insert.getNode().deepCopy(), Math.min(parentNode.getTree().getChildren().size(), insert.getPosition()));
+                        results.add(new MutatedNode(new TreeNode(deepCopy), this, 100, "Cheated-Renamed " + delete.getNode().getLabel() + " to " + insert.getNode().getLabel() + " @~" + delete.getNode().getPos()));
                     }
                 }
-                System.out.println(replace);
             }
         }
         return results;

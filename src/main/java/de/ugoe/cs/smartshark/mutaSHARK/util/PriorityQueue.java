@@ -23,6 +23,11 @@ public class PriorityQueue
         return queue.remove(0);
     }
 
+    public SearchNode dequeueLast()
+    {
+        return queue.remove(queue.size() - 1);
+    }
+
     public int getSize()
     {
         return queue.size();
@@ -43,7 +48,9 @@ public class PriorityQueue
         for (SearchNode searchNode : queue)
         {
             if (searchNode.getCurrentTreeNode().equals(treeNode))
+            {
                 return searchNode;
+            }
         }
         return null;
     }

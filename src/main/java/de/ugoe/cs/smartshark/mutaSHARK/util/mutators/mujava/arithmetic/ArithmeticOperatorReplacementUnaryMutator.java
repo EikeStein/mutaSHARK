@@ -13,7 +13,7 @@ public class ArithmeticOperatorReplacementUnaryMutator extends ArithmeticOperato
 
 
     @Override
-    public List<MutatedNode> getPossibleMutations(TreeNode treeNode, TreeNode target)
+    public List<MutatedNode> getPossibleMutations(TreeNode treeNode, TreeNode target, List<Action> actions)
     {
         return null;
     }

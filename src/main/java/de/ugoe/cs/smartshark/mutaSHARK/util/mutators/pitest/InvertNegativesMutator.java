@@ -1,127 +1,204 @@
 package de.ugoe.cs.smartshark.mutaSHARK.util.mutators.pitest;
 
-import com.github.gumtreediff.actions.model.Action;
-import com.github.gumtreediff.actions.model.Delete;
-import com.github.gumtreediff.actions.model.Insert;
-import com.github.gumtreediff.actions.model.Move;
+import com.github.gumtreediff.actions.model.*;
 import com.github.gumtreediff.tree.ITree;
-import de.ugoe.cs.smartshark.mutaSHARK.util.ActionExecutor;
-import de.ugoe.cs.smartshark.mutaSHARK.util.DiffTree;
-import de.ugoe.cs.smartshark.mutaSHARK.util.Replace;
-import de.ugoe.cs.smartshark.mutaSHARK.util.TreeNode;
+import com.github.gumtreediff.tree.Tree;
+import de.ugoe.cs.smartshark.mutaSHARK.util.*;
 import de.ugoe.cs.smartshark.mutaSHARK.util.mutators.MutatedNode;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class InvertNegativesMutator extends PitestMutator
 {
     @Override
-    public List<MutatedNode> getPossibleMutations(TreeNode treeNode, TreeNode target)
+    public List<MutatedNode> getPossibleMutations(TreeNode treeNode, TreeNode target, List<Action> actions)
     {
-        treeNode = new TreeNode(treeNode.getTree().deepCopy());
-        target = new TreeNode(target.getTree().deepCopy());
-        List<Action> actions = new DiffTree(treeNode.getTree(), target.getTree()).getActions();
+        ArrayList<MutatedNode> results = new ArrayList<>();
+        results.addAll(getPossibleInsertMutations(treeNode, target, actions));
+        results.addAll(getPossibleRemoveMutations(treeNode, target, actions));
+        results.addAll(getPossibleReplaceMutations(treeNode, target, actions));
+        return results;
+    }
+
+    private List<MutatedNode> getPossibleReplaceMutations(TreeNode treeNode, TreeNode target, List<Action> actions)
+    {
         ArrayList<MutatedNode> results = new ArrayList<>();
         for (int i = 0; i < actions.size(); i++)
         {
-            Action action = actions.get(i);
-            if (action instanceof Insert)
+            if (actions.get(i) instanceof Insert)
             {
-                Insert insert = (Insert) action;
-                ITree insertNode = insert.getNode();
-                ITree parent = insert.getParent();
-                if (parent.getType().name.equals("Assignment") && insertNode.getType().name.equals("PrefixExpression"))
+                Insert insert = (Insert) actions.get(i);
+                if (!insert.getNode().getType().name.equals("PREFIX_EXPRESSION_OPERATOR"))
                 {
-                    List<ITree> insertNodeChildren = insertNode.getChildren();
-                    if (insertNodeChildren.size() == 2)
+                    continue;
+                }
+                ITree parent = insert.getParent();
+                for (int j = 0; j < actions.size(); j++)
+                {
+                    if (actions.get(j) instanceof Delete)
                     {
-                        ITree prefixOperator = insertNodeChildren.get(0);
-                        ITree targetMovedNode = insertNodeChildren.get(1);
-                        if (prefixOperator.getType().name.equals("PREFIX_EXPRESSION_OPERATOR") && prefixOperator.getLabel().equals("-"))
+                        Delete delete = (Delete) actions.get(j);
+                        if (!delete.getNode().getType().name.equals("PREFIX_EXPRESSION_OPERATOR"))
                         {
-                            List<Move> moves = actions.stream().filter(a ->
-                                                                       {
-                                                                           if (!(a instanceof Move))
-                                                                           {
-                                                                               return false;
-                                                                           }
-                                                                           Move move = (Move) a;
-                                                                           boolean equalToTarget = move.getNode().isIsomorphicTo(targetMovedNode);
-                                                                           boolean equalToParent = move.getNode().getParent() == parent;
-                                                                           return equalToParent && equalToTarget;
-                                                                       }).map(a -> (Move) a).collect(Collectors.toList());
-                            if (moves.size() == 1)
+                            continue;
+                        }
+                        if (delete.getNode().getParent() != parent)
+                        {
+                            continue;
+                        }
+                        String oldLabel = delete.getNode().getLabel();
+                        String newLabel = insert.getNode().getLabel();
+                        if (!isSupportedReplacePrefix(oldLabel, newLabel))
+                        {
+                            continue;
+                        }
+                        TreeNode clonedTree = new TreeNode(treeNode.getTree().deepCopy());
+                        String url = TreeHelper.getUrl(parent, Integer.MAX_VALUE);
+                        TreeNode parentNode = new TreeNode(clonedTree.getTree().getChild(url));
+                        parentNode.removeChildAt(insert.getPosition());
+                        parentNode.getTree().insertChild(insert.getNode().deepCopy(), insert.getPosition());
+                        results.add(new MutatedNode(clonedTree, this, 1, "Replaced prefix " + oldLabel + " with " + newLabel + " @~" + parent.getPos()));
+                    }
+
+                }
+            }
+        }
+        return results;
+    }
+
+    private boolean isSupportedReplacePrefix(String oldLabel, String newLabel)
+    {
+        switch (oldLabel)
+        {
+            case "-":
+                return newLabel.equals("+");
+            case "+":
+                return newLabel.equals("-");
+        }
+        return false;
+    }
+
+    private List<MutatedNode> getPossibleInsertMutations(TreeNode treeNode, TreeNode target, List<Action> actions)
+    {
+        ArrayList<MutatedNode> results = new ArrayList<>();
+        for (int i = 0; i < actions.size(); i++)
+        {
+            if (actions.get(i) instanceof Insert)
+            {
+                Insert insertPrefix = (Insert) actions.get(i);
+                if (!insertPrefix.getNode().getType().name.equals("PrefixExpression"))
+                {
+                    continue;
+                }
+                if (insertPrefix.getNode().getChildren().size() != 2)
+                {
+                    continue;
+                }
+                if (!insertPrefix.getNode().getChildren().get(0).getType().name.equals("PREFIX_EXPRESSION_OPERATOR") && !insertPrefix.getNode().getChildren().get(0).getLabel().equals("-"))
+                {
+                    continue;
+                }
+                ITree parent = insertPrefix.getNode().getParent();
+                for (int j = 0; j < actions.size(); j++)
+                {
+                    if (actions.get(j) instanceof TreeInsert)
+                    {
+                        TreeInsert innerInsert = (TreeInsert) actions.get(j);
+                        if (innerInsert.getNode().getParent() != insertPrefix.getNode())
+                        {
+                            continue;
+                        }
+                        for (int k = 0; k < actions.size(); k++)
+                        {
+                            if (actions.get(k) instanceof TreeDelete)
                             {
-                                Move move = moves.get(0);
-                                Delete delete = new Delete(move.getNode());
-                                ActionExecutor actionExecutor = new ActionExecutor();
-                                ITree clonedTree = treeNode.getTree().deepCopy();
-                                Insert localInsert = actionExecutor.reassignTree(insert, clonedTree);
-                                delete = actionExecutor.reassignTree(delete, clonedTree);
-                                actionExecutor.executeAction(localInsert);
-                                actionExecutor.executeAction(delete);
-                                results.add(new MutatedNode(new TreeNode(clonedTree), this, 1, "Invert-Negative-inserted: " + localInsert));
-                                treeNode = new TreeNode(treeNode.getTree().deepCopy());
-                                target = new TreeNode(target.getTree().deepCopy());
-                                actions = new DiffTree(treeNode.getTree(), target.getTree()).getActions();
+                                TreeDelete delete = (TreeDelete) actions.get(k);
+                                if (delete.getNode().getParent().getPos() != parent.getPos())
+                                {
+                                    continue;
+                                }
+                                if (delete.getNode().getParent().getChildren().size() != parent.getChildren().size())
+                                {
+                                    continue;
+                                }
+                                if (!delete.getNode().getParent().getType().name.equals(parent.getType().name))
+                                {
+                                    continue;
+                                }
+                                ITree deepCopy = treeNode.getTree().deepCopy();
+                                TreeNode clonedTree = new TreeNode(deepCopy);
+                                String url = TreeHelper.getUrl(parent, Integer.MAX_VALUE);
+                                TreeNode parentNode = new TreeNode(clonedTree.getTree().getChild(url));
+                                parentNode.removeChildAt(insertPrefix.getPosition());
+                                parentNode.getTree().insertChild(insertPrefix.getNode().deepCopy(), insertPrefix.getPosition());
+                                results.add(new MutatedNode(clonedTree, this, 1, "Added - prefix @~" + parent.getPos()));
                             }
                         }
                     }
                 }
             }
-            if (action instanceof Move)
+        }
+        return results;
+    }
+
+    private List<MutatedNode> getPossibleRemoveMutations(TreeNode treeNode, TreeNode target, List<Action> actions)
+    {
+        ArrayList<MutatedNode> results = new ArrayList<>();
+        for (int i = 0; i < actions.size(); i++)
+        {
+            if (actions.get(i) instanceof Delete)
             {
-                Move move = (Move) action;
-                ITree parent = move.getParent();
-                if (parent.getType().name.equals("Assignment"))
+                Delete deletePrefix = (Delete) actions.get(i);
+                if (!deletePrefix.getNode().getType().name.equals("PrefixExpression"))
                 {
-                    List<Delete> prefixExpressions = actions.stream().filter(a ->
-                                                                             {
-                                                                                 if (!(a instanceof Delete))
-                                                                                 {
-                                                                                     return false;
-                                                                                 }
-                                                                                 if (!a.getNode().getType().name.equals("PrefixExpression"))
-                                                                                 {
-                                                                                     return false;
-                                                                                 }
-                                                                                 ITree deleteParent = a.getNode().getParent();
-                                                                                 return deleteParent == parent;
-                                                                             }).map(a -> (Delete) a).collect(Collectors.toList());
-                    if (prefixExpressions.size() == 1)
+                    continue;
+                }
+                if (deletePrefix.getNode().getChildren().size() != 2)
+                {
+                    continue;
+                }
+                if (!deletePrefix.getNode().getChildren().get(0).getType().name.equals("PREFIX_EXPRESSION_OPERATOR") && !deletePrefix.getNode().getChildren().get(0).getLabel().equals("-"))
+                {
+                    continue;
+                }
+                ITree parent = deletePrefix.getNode().getParent();
+                for (int j = 0; j < actions.size(); j++)
+                {
+                    if (actions.get(j) instanceof TreeDelete)
                     {
-                        Delete prefixExpression = prefixExpressions.get(0);
-                        ITree prefixExpressionNode = prefixExpression.getNode();
-                        List<Delete> prefixExpressionOperators = actions.stream().filter(a ->
-                                                                                         {
-                                                                                             if (!(a instanceof Delete))
-                                                                                             {
-                                                                                                 return false;
-                                                                                             }
-                                                                                             if (!a.getNode().getType().name.equals("PREFIX_EXPRESSION_OPERATOR"))
-                                                                                             {
-                                                                                                 return false;
-                                                                                             }
-                                                                                             if (!a.getNode().getLabel().equals("-"))
-                                                                                             {
-                                                                                                 return false;
-                                                                                             }
-                                                                                             ITree deleteParent = a.getNode().getParent();
-                                                                                             return deleteParent == prefixExpressionNode;
-                                                                                         }).map(a -> (Delete) a).collect(Collectors.toList());
-                        if (prefixExpressionOperators.size() == 1)
+                        TreeDelete innerDelete = (TreeDelete) actions.get(j);
+                        if (innerDelete.getNode().getParent() != deletePrefix.getNode())
                         {
-                            Delete prefixExpressionOperator = prefixExpressionOperators.get(0);
-                            ActionExecutor actionExecutor = new ActionExecutor();
-                            actionExecutor.executeAction(move);
-                            actionExecutor.executeAction(prefixExpression);
-                            actionExecutor.executeAction(prefixExpressionOperator);
-                            results.add(new MutatedNode(treeNode, this, 1, "Invert-Negative-deleted: " + move + " -> " + prefixExpression + " -> " + prefixExpressionOperator));
-                            treeNode = new TreeNode(treeNode.getTree().deepCopy());
-                            target = new TreeNode(target.getTree().deepCopy());
-                            actions = new DiffTree(treeNode.getTree(), target.getTree()).getActions();
+                            continue;
+                        }
+                        for (int k = 0; k < actions.size(); k++)
+                        {
+                            if (actions.get(k) instanceof TreeInsert)
+                            {
+                                TreeInsert insert = (TreeInsert) actions.get(k);
+                                if (insert.getParent().getPos() != parent.getPos())
+                                {
+                                    continue;
+                                }
+                                if (insert.getParent().getChildren().size() != parent.getChildren().size())
+                                {
+                                    continue;
+                                }
+                                if (!insert.getParent().getType().name.equals(parent.getType().name))
+                                {
+                                    continue;
+                                }
+                                ITree deepCopy = treeNode.getTree().deepCopy();
+                                TreeNode clonedTree = new TreeNode(deepCopy);
+                                String url = TreeHelper.getUrl(parent, Integer.MAX_VALUE);
+                                TreeNode parentNode = new TreeNode(clonedTree.getTree().getChild(url));
+                                parentNode.removeChildAt(insert.getPosition());
+                                parentNode.getTree().insertChild(insert.getNode().deepCopy(), insert.getPosition());
+                                results.add(new MutatedNode(clonedTree, this, 1, "Removed - prefix @~" + parent.getPos()));
+                            }
                         }
                     }
                 }

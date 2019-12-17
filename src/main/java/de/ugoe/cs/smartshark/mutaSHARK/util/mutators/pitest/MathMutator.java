@@ -4,13 +4,14 @@ import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.actions.model.Delete;
 import com.github.gumtreediff.actions.model.Insert;
 import com.github.gumtreediff.tree.ITree;
-import de.ugoe.cs.smartshark.mutaSHARK.util.*;
+import de.ugoe.cs.smartshark.mutaSHARK.util.TreeHelper;
+import de.ugoe.cs.smartshark.mutaSHARK.util.TreeNode;
 import de.ugoe.cs.smartshark.mutaSHARK.util.mutators.MutatedNode;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ConditionalsBoundaryMutator extends PitestMutator
+public class MathMutator extends PitestMutator
 {
     @Override
     public List<MutatedNode> getPossibleMutations(TreeNode treeNode, TreeNode target, List<Action> actions)
@@ -57,7 +58,7 @@ public class ConditionalsBoundaryMutator extends PitestMutator
                     int positionInParent = delete.getNode().positionInParent();
                     newParent.removeChildAt(positionInParent);
                     newParent.getTree().insertChild(insert.getNode().deepCopy(), positionInParent);
-                    results.add(new MutatedNode(clonedTree, this, 1, "Replaced boundary " + originalLabel + " with " + newLabel + " @~" + delete.getNode().getPos()));
+                    results.add(new MutatedNode(clonedTree, this, 1, "Replaced math " + originalLabel + " with " + newLabel + " @~" + delete.getNode().getPos()));
                 }
             }
         }
@@ -68,14 +69,28 @@ public class ConditionalsBoundaryMutator extends PitestMutator
     {
         switch (originalLabel)
         {
-            case "<":
-                return newLabel.equalsIgnoreCase("<=");
-            case "<=":
-                return newLabel.equalsIgnoreCase("<");
-            case ">":
-                return newLabel.equalsIgnoreCase(">=");
-            case ">=":
-                return newLabel.equalsIgnoreCase(">");
+            case "+":
+                return newLabel.equalsIgnoreCase("-");
+            case "-":
+                return newLabel.equalsIgnoreCase("+");
+            case "*":
+                return newLabel.equalsIgnoreCase("/");
+            case "/":
+                return newLabel.equalsIgnoreCase("*");
+            case "%":
+                return newLabel.equalsIgnoreCase("*");
+            case "&":
+                return newLabel.equalsIgnoreCase("|");
+            case "|":
+                return newLabel.equalsIgnoreCase("&");
+            case "^":
+                return newLabel.equalsIgnoreCase("&");
+            case "<<":
+                return newLabel.equalsIgnoreCase(">>");
+            case ">>":
+                return newLabel.equalsIgnoreCase("<<");
+            case ">>>":
+                return newLabel.equalsIgnoreCase("<<");
         }
         return false;
     }

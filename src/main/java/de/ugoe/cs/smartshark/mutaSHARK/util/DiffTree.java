@@ -15,122 +15,50 @@ import java.util.*;
 
 public class DiffTree
 {
-    protected final Set<ITree> srcUpdTrees = new HashSet<>();
-
-    protected final Set<ITree> dstUpdTrees = new HashSet<>();
-
-    protected final Set<ITree> srcMvTrees = new HashSet<>();
-
-    protected final Set<ITree> dstMvTrees = new HashSet<>();
-
-    protected final Set<ITree> srcDelTrees = new HashSet<>();
-
-    protected final Set<ITree> dstAddTrees = new HashSet<>();
-
     private List<Action> actions;
-
-    public Set<ITree> getSrcUpdTrees()
-    {
-        return srcUpdTrees;
-    }
-
-    public Set<ITree> getDstUpdTrees()
-    {
-        return dstUpdTrees;
-    }
-
-    public Set<ITree> getSrcMvTrees()
-    {
-        return srcMvTrees;
-    }
-
-    public Set<ITree> getDstMvTrees()
-    {
-        return dstMvTrees;
-    }
-
-    public Set<ITree> getSrcDelTrees()
-    {
-        return srcDelTrees;
-    }
-
-    public Set<ITree> getDstAddTrees()
-    {
-        return dstAddTrees;
-    }
 
     public List<Action> getActions()
     {
         return actions;
     }
 
-    public DiffTree(ITree treeFrom, ITree treeTo)
+    public DiffTree(ITree treeFrom, ITree treeTo, boolean recursive)
     {
-        classify(treeFrom, treeTo);
+        classify(treeFrom, treeTo, recursive);
     }
 
-    private void classify(ITree treeFrom, ITree treeTo)
+    private void classify(ITree treeFrom, ITree treeTo, boolean recursive)
     {
-        EditScriptGenerator chawatheScriptGenerator = new ActionScriptGenerator();
+        EditScriptGenerator chawatheScriptGenerator = new InsertDeleteChawatheScriptGenerator();
         ITree toClone = treeTo.deepCopy();
         ITree fromClone = treeFrom.deepCopy();
         MappingStore mappings = match(fromClone, toClone, new MappingStore(fromClone, toClone));
         actions = chawatheScriptGenerator.computeActions(mappings).asList();
-        cleanUp(actions);
-
-        for (Action a : actions)
+        if (recursive)
         {
-            if (a instanceof Delete)
-            {
-                srcDelTrees.add(a.getNode());
-            }
-            else if (a instanceof TreeDelete)
-            {
-                srcDelTrees.add(a.getNode());
-                srcDelTrees.addAll(a.getNode().getDescendants());
-            }
-            else if (a instanceof Insert)
-            {
-                dstAddTrees.add(a.getNode());
-            }
-            else if (a instanceof TreeInsert)
-            {
-                dstAddTrees.add(a.getNode());
-                dstAddTrees.addAll(a.getNode().getDescendants());
-            }
-            else if (a instanceof Update)
-            {
-                srcUpdTrees.add(a.getNode());
-                dstUpdTrees.add(mappings.getDstForSrc(a.getNode()));
-            }
-            else if (a instanceof Move)
-            {
-                srcMvTrees.add(a.getNode());
-                srcMvTrees.addAll(a.getNode().getDescendants());
-                dstMvTrees.add(mappings.getDstForSrc(a.getNode()));
-                dstMvTrees.addAll(mappings.getDstForSrc(a.getNode()).getDescendants());
-            }
+            cleanUp(actions);
         }
+
     }
 
     private void cleanUp(List<Action> actions)
     {
-        for (int i = 0; i < actions.size(); i++)
+        List<Action> additionalActions = new ArrayList<>();
+        for (Action action : actions)
         {
-            Action action = actions.get(i);
-            if (action instanceof Insert)
+            for (ITree descendant : action.getNode().getDescendants())
             {
-                Insert insert = (Insert) action;
-                Optional<Action> deleteAction = actions.stream().filter(a -> a instanceof Delete && TreeHelper.urlEqual(a.getNode(), insert.getNode(), true)).findAny();
-                if (deleteAction.isPresent())
+                if (action instanceof Insert)
                 {
-                    actions.remove(insert);
-                    actions.remove(deleteAction.get());
-                    actions.add(i, new Replace(deleteAction.get().getNode(), insert.getNode()));
-                    i = 0;
+                    additionalActions.add(new Insert(descendant, descendant.getParent(), descendant.positionInParent()));
+                }
+                if (action instanceof Delete)
+                {
+                    additionalActions.add(new Delete(descendant));
                 }
             }
         }
+        actions.addAll(additionalActions);
     }
 
     private MappingStore match(ITree src, ITree dst, MappingStore mappings)

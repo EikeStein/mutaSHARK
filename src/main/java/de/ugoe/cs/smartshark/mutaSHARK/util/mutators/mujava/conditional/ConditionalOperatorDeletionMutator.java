@@ -13,7 +13,7 @@ public class ConditionalOperatorDeletionMutator extends ConditionalOperatorMutat
 
 
     @Override
-    public List<MutatedNode> getPossibleMutations(TreeNode treeNode, TreeNode target)
+    public List<MutatedNode> getPossibleMutations(TreeNode treeNode, TreeNode target, List<Action> actions)
     {
         return null;
     }

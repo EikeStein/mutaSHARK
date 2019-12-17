@@ -12,7 +12,7 @@ public class ArithmeticOperatorDeletionUnaryMutator extends ArithmeticOperatorDe
 {
 
     @Override
-    public List<MutatedNode> getPossibleMutations(TreeNode treeNode, TreeNode target)
+    public List<MutatedNode> getPossibleMutations(TreeNode treeNode, TreeNode target, List<Action> actions)
     {
         return null;
     }

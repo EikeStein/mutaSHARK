@@ -20,7 +20,7 @@ public class MutaShark
     // -b|-bug path/to/bug.java -f|-fix path/to/fix.java -m|-mutator full.name.of.mutator1 full.name.of.mutator2 ...
     // path/to/bug.java path/to/fix.java  full.name.of.mutator1 full.name.of.mutator2 ...
     // path/to/bug.java path/to/fix.java (in this case all mutatations in package util.mutators are used)
-    public static void main(String[] args) throws InstantiationException, IllegalAccessException, ClassNotFoundException, IOException
+    public static void main(String[] args) throws InstantiationException, IllegalAccessException, ClassNotFoundException, IOException, TooManyActionsException
     {
         searchResult = null;
         StartUpOptions startUpOptions = StartUpOptions.parseArgs(args);

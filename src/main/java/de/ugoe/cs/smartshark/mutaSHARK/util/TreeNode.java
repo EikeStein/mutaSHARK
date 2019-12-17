@@ -19,12 +19,20 @@ public class TreeNode
         return tree;
     }
 
-    public void removeChild(ITree tree)
+    public void removeChild(ITree child)
     {
-        ArrayList<ITree> children = new ArrayList<>(this.tree.getChildren());
-        children.remove(tree);
-        tree.setParent(null);
-        this.tree.setChildren(children);
+        ArrayList<ITree> children = new ArrayList<>(tree.getChildren());
+        children.remove(child);
+        child.setParent(null);
+        tree.setChildren(children);
+    }
+
+    public void removeChildAt(int index)
+    {
+        ArrayList<ITree> children = new ArrayList<>(tree.getChildren());
+        children.get(index).setParent(null);
+        children.remove(index);
+        tree.setChildren(children);
     }
 }
 
