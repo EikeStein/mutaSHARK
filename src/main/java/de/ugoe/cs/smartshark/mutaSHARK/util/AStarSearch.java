@@ -9,11 +9,11 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-public class AStarSearch
+public class AStarSearch implements ISearchAlgorithm
 {
     public final int maxActions = 10000;
     public final int maxMutationsPerMutator = 10000;
-    public final int maxOpenListSize = 10000;
+    public final int maxOpenListSize = 10;
     private final TreeNode fromNode;
     private final TreeNode toNode;
 
@@ -38,6 +38,8 @@ public class AStarSearch
         while (openList.getSize() > 0 && foundPaths.size() < searchSettings.maxFoundPaths)
         {
             SearchNode currentNode = openList.dequeue();
+            List<SearchNode> prunedNodes = openList.prune(maxOpenListSize);
+            closedList.addAll(prunedNodes);
             if (currentNode.getCurrentTreeNode().getTree().isIsomorphicTo(toNode.getTree()))
             {
                 foundPaths.add(new SearchPath(currentNode));
@@ -51,7 +53,7 @@ public class AStarSearch
         return new SearchResult(foundPaths, getClostestPaths(searchSettings));
     }
 
-    private List<SearchPath> getClostestPaths(SearchSettings searchSettings)
+    private List<SearchPath> getClostestPaths(SearchSettings searchSettings) throws TooManyActionsException
     {
         ArrayList<SearchPath> result = new ArrayList<>();
         closedList.sort(Comparator.comparingDouble(SearchNode::getHeuristicCost));
@@ -97,17 +99,10 @@ public class AStarSearch
                 }
                 else
                 {
-                    if (openList.getSize() <= maxOpenListSize)
-                    {
-                        openList.enqueue(newSearchNode);
-                        // SearchNode worstNode = openList.dequeueLast();
-                        // closedList.add(worstNode);
-                    }
+                    openList.enqueue(newSearchNode);
                 }
-
             }
         }
-
     }
-
 }
+

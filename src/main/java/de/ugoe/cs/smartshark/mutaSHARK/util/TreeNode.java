@@ -34,5 +34,11 @@ public class TreeNode
         children.remove(index);
         tree.setChildren(children);
     }
+
+    @Override
+    public String toString()
+    {
+        return "TreeNode{" + "tree=" + tree + '}';
+    }
 }
 

@@ -347,4 +347,10 @@ public class IncrementsMutator extends PitestMutator
         }
         return results;
     }
+
+    @Override
+    public double getExpectedCost()
+    {
+        return 1;
+    }
 }

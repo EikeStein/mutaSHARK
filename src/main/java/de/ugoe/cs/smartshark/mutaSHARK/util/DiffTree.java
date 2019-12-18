@@ -2,14 +2,9 @@ package de.ugoe.cs.smartshark.mutaSHARK.util;
 
 import com.github.gumtreediff.actions.*;
 import com.github.gumtreediff.actions.model.*;
-import com.github.gumtreediff.matchers.Mapping;
 import com.github.gumtreediff.matchers.MappingStore;
-import com.github.gumtreediff.matchers.Matcher;
-import com.github.gumtreediff.matchers.heuristic.LcsMatcher;
-import com.github.gumtreediff.tree.FakeTree;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeUtils;
-import com.github.gumtreediff.utils.SequenceAlgorithms;
 
 import java.util.*;
 
@@ -22,12 +17,12 @@ public class DiffTree
         return actions;
     }
 
-    public DiffTree(ITree treeFrom, ITree treeTo, boolean recursive)
+    public DiffTree(ITree treeFrom, ITree treeTo, boolean recursive) throws TooManyActionsException
     {
         classify(treeFrom, treeTo, recursive);
     }
 
-    private void classify(ITree treeFrom, ITree treeTo, boolean recursive)
+    private void classify(ITree treeFrom, ITree treeTo, boolean recursive) throws TooManyActionsException
     {
         EditScriptGenerator chawatheScriptGenerator = new InsertDeleteChawatheScriptGenerator();
         ITree toClone = treeTo.deepCopy();
@@ -38,7 +33,6 @@ public class DiffTree
         {
             cleanUp(actions);
         }
-
     }
 
     private void cleanUp(List<Action> actions)
@@ -50,18 +44,57 @@ public class DiffTree
             {
                 if (action instanceof Insert)
                 {
-                    additionalActions.add(new Insert(descendant, descendant.getParent(), descendant.positionInParent()));
+                    Insert insert = new Insert(descendant, descendant.getParent(), descendant.positionInParent());
+                    if (notContains(additionalActions, insert) && notContains(actions, insert))
+                    {
+                        additionalActions.add(insert);
+                    }
                 }
                 if (action instanceof Delete)
                 {
-                    additionalActions.add(new Delete(descendant));
+                    Delete delete = new Delete(descendant);
+                    if (notContains(additionalActions, delete) && notContains(actions, delete))
+                    {
+                        additionalActions.add(delete);
+                    }
                 }
             }
         }
         actions.addAll(additionalActions);
     }
 
-    private MappingStore match(ITree src, ITree dst, MappingStore mappings)
+    private boolean notContains(List<Action> actions, Delete delete)
+    {
+        for (Action action : actions)
+        {
+            if (action instanceof Delete)
+            {
+                if (action.getNode().isIsomorphicTo(delete.getNode()))
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private boolean notContains(List<Action> actions, Insert insert)
+    {
+        for (Action action : actions)
+        {
+            if (action instanceof Insert)
+            {
+                Insert tempInsert = (Insert) action;
+                if (tempInsert.getNode().isIsomorphicTo(insert.getNode()) && tempInsert.getParent().isIsomorphicTo(insert.getParent()) && insert.getName().equals(tempInsert.getName()))
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private MappingStore match(ITree src, ITree dst, MappingStore mappings) throws TooManyActionsException
     {
         Implementation impl = new Implementation(src, dst, mappings);
         impl.match();
@@ -81,7 +114,7 @@ public class DiffTree
             this.mappings = mappings;
         }
 
-        public void match()
+        public void match() throws TooManyActionsException
         {
             List<ITree> srcSeq = TreeUtils.preOrder(src);
             List<ITree> dstSeq = TreeUtils.preOrder(dst);
@@ -94,12 +127,19 @@ public class DiffTree
             }
         }
 
-        private static List<int[]> longestCommonSubsequenceWithTypeAndLabel(List<ITree> s0, List<ITree> s1)
+        private static List<int[]> longestCommonSubsequenceWithTypeAndLabel(List<ITree> s0,
+                                                                            List<ITree> s1) throws TooManyActionsException
         {
-            short[][] lengths = new short[s0.size() + 1][s1.size() + 1];
-            for (int i = 0; i < s0.size(); i++)
+            final int s0Size = s0.size();
+            final int s1Size = s1.size();
+            if ((s0Size - s1Size) * (s0Size + s1Size) > 1800000)
             {
-                for (int j = 0; j < s1.size(); j++)
+                throw new TooManyActionsException(s0Size);
+            }
+            short[][] lengths = new short[s0Size + 1][s1Size + 1];
+            for (int i = 0; i < s0Size; i++)
+            {
+                for (int j = 0; j < s1Size; j++)
                 {
                     if (s0.get(i).hasSameTypeAndLabel(s1.get(j)))
                     {
@@ -112,7 +152,7 @@ public class DiffTree
                 }
             }
 
-            return extractIndexes(lengths, s0.size(), s1.size());
+            return extractIndexes(lengths, s0Size, s1Size);
         }
 
         private static List<int[]> extractIndexes(short[][] lengths, int length1, int length2)

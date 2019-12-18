@@ -32,4 +32,10 @@ public class MutatedNode extends TreeNode
     {
         return mutationOperator;
     }
+
+    @Override
+    public String toString()
+    {
+        return "MutatedNode{" + "mutationOperator=" + mutationOperator + ", cost=" + cost + ", description='" + description + '\'' + '}';
+    }
 }

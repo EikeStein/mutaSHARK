@@ -11,5 +11,7 @@ public abstract class TreeMutationOperator
     public abstract List<MutatedNode> getPossibleMutations(TreeNode treeNode, TreeNode target, List<Action> actions);
 
     public abstract String getSourceName();
+
+    public abstract double getExpectedCost();
 }
 

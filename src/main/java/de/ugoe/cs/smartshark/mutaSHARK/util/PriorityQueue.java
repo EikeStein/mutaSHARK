@@ -8,7 +8,7 @@ public class PriorityQueue
 {
     private List<SearchNode> queue = new ArrayList<>();
 
-    public void enqueue(SearchNode searchNode)
+    public void enqueue(SearchNode searchNode) throws TooManyActionsException
     {
         int index = 0;
         while (index < queue.size() && queue.get(index).getTotalCost() <= searchNode.getTotalCost())
@@ -55,10 +55,20 @@ public class PriorityQueue
         return null;
     }
 
-    public void replace(SearchNode originalNode, SearchNode newNode)
+    public void replace(SearchNode originalNode, SearchNode newNode) throws TooManyActionsException
     {
         queue.remove(originalNode);
         enqueue(newNode);
+    }
+
+    public List<SearchNode> prune(int maxOpenListSize)
+    {
+        List<SearchNode> prunedNodes = new ArrayList<>();
+        while (queue.size() > maxOpenListSize)
+        {
+            prunedNodes.add(queue.remove(queue.size() - 1));
+        }
+        return prunedNodes;
     }
 }
 

@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="62cd4c78-7a4f-486f-9d10-52c9c2afeac0" name="Default Changelist" comment="Smarter Expand and switched to pitest">
-      <change afterPath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/TooManyActionsException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/mutators/pitest/MathMutator.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/mutators/pitest/NegateConditionalsMutator.java" afterDir="false" />
+    <list default="true" id="62cd4c78-7a4f-486f-9d10-52c9c2afeac0" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/GreedySearch.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/ISearchAlgorithm.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/5.2.1/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.2.1/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/5.2.1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.2.1/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/5.2.1/fileContent/fileContent.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.2.1/fileContent/fileContent.lock" afterDir="false" />
@@ -13,25 +12,27 @@
       <change beforePath="$PROJECT_DIR$/.gradle/5.2.1/javaCompile/classAnalysis.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.2.1/javaCompile/classAnalysis.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/5.2.1/javaCompile/javaCompile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.2.1/javaCompile/javaCompile.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/classes/java/main/de/ugoe/cs/smartshark/mutaSHARK/MutaShark.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/de/ugoe/cs/smartshark/mutaSHARK/MutaShark.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/de/ugoe/cs/smartshark/mutaSHARK/testclasses/from/ClassA.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/de/ugoe/cs/smartshark/mutaSHARK/testclasses/from/ClassA.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/de/ugoe/cs/smartshark/mutaSHARK/testclasses/to/ClassA.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/de/ugoe/cs/smartshark/mutaSHARK/testclasses/to/ClassA.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/classes/java/main/de/ugoe/cs/smartshark/mutaSHARK/util/AStarSearch.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/de/ugoe/cs/smartshark/mutaSHARK/util/AStarSearch.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/classes/java/main/de/ugoe/cs/smartshark/mutaSHARK/util/Heuristic.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/de/ugoe/cs/smartshark/mutaSHARK/util/Heuristic.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/de/ugoe/cs/smartshark/mutaSHARK/util/HeuristicBase.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/de/ugoe/cs/smartshark/mutaSHARK/util/HeuristicBase.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/classes/java/main/de/ugoe/cs/smartshark/mutaSHARK/util/PriorityQueue.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/de/ugoe/cs/smartshark/mutaSHARK/util/PriorityQueue.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/de/ugoe/cs/smartshark/mutaSHARK/util/SearchNode.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/de/ugoe/cs/smartshark/mutaSHARK/util/SearchNode.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/de/ugoe/cs/smartshark/mutaSHARK/util/SearchPath.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/de/ugoe/cs/smartshark/mutaSHARK/util/SearchPath.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/classes/java/main/de/ugoe/cs/smartshark/mutaSHARK/util/TreeNode.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/de/ugoe/cs/smartshark/mutaSHARK/util/TreeNode.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/classes/java/main/de/ugoe/cs/smartshark/mutaSHARK/util/mutators/TreeMutationOperator.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/de/ugoe/cs/smartshark/mutaSHARK/util/mutators/TreeMutationOperator.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/MutaShark.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/MutaShark.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/testclasses/from/ClassA.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/testclasses/from/ClassA.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/testclasses/to/ClassA.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/testclasses/to/ClassA.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/AStarSearch.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/AStarSearch.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/DiffTree.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/DiffTree.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/Heuristic.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/Heuristic.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/HeuristicBase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/HeuristicBase.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/PriorityQueue.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/PriorityQueue.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/SearchNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/SearchNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/SearchPath.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/SearchPath.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/TreeNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/TreeNode.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/defects4j/Defects4JRunner.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/defects4j/Defects4JRunner.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/mutators/MutatedNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/mutators/MutatedNode.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/mutators/TreeMutationOperator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/mutators/TreeMutationOperator.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/mutators/mujava/arithmetic/ArithmeticOperatorDeletionShortCutMutator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/mutators/mujava/arithmetic/ArithmeticOperatorDeletionShortCutMutator.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/mutators/mujava/arithmetic/ArithmeticOperatorDeletionUnaryMutator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/mutators/mujava/arithmetic/ArithmeticOperatorDeletionUnaryMutator.java" afterDir="false" />
@@ -42,17 +43,17 @@
       <change beforePath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/mutators/mujava/arithmetic/ArithmeticOperatorReplacementUnaryMutator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/mutators/mujava/arithmetic/ArithmeticOperatorReplacementUnaryMutator.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/mutators/mujava/conditional/ConditionalOperatorDeletionMutator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/mutators/mujava/conditional/ConditionalOperatorDeletionMutator.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/mutators/mujava/conditional/ConditionalOperatorInsertionMutator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/mutators/mujava/conditional/ConditionalOperatorInsertionMutator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/mutators/mujava/conditional/ConditionalOperatorMutator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/mutators/mujava/conditional/ConditionalOperatorMutator.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/mutators/mujava/conditional/ConditionalOperatorReplacementMutator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/mutators/mujava/conditional/ConditionalOperatorReplacementMutator.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/mutators/mujava/logical/LogicalOperatorDeletionMutator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/mutators/mujava/logical/LogicalOperatorDeletionMutator.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/mutators/mujava/logical/LogicalOperatorInsertionMutator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/mutators/mujava/logical/LogicalOperatorInsertionMutator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/mutators/mujava/logical/LogicalOperatorMutator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/mutators/mujava/logical/LogicalOperatorMutator.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/mutators/mujava/logical/LogicalOperatorReplacementMutator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/mutators/mujava/logical/LogicalOperatorReplacementMutator.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/mutators/mujava/relational/RelationalOperatorReplamentMutator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/mutators/mujava/relational/RelationalOperatorReplamentMutator.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/mutators/mujava/shift/ShiftOperatorReplacementMutator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/mutators/mujava/shift/ShiftOperatorReplacementMutator.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/mutators/pitest/ConditionalsBoundaryMutator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/mutators/pitest/ConditionalsBoundaryMutator.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/mutators/pitest/IncrementsMutator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/mutators/pitest/IncrementsMutator.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/mutators/pitest/InvertNegativesMutator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/mutators/pitest/InvertNegativesMutator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/mutators/pitest/MathMutator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/mutators/pitest/MathMutator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/mutators/pitest/NegateConditionalsMutator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/mutators/pitest/NegateConditionalsMutator.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/mutators/pitest/RenameMutator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/mutators/pitest/RenameMutator.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -156,11 +157,11 @@
     <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1575554076386" />
     <property name="extract.method.default.visibility" value="private" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="project.structure.last.edited" value="Project" />
+    <property name="project.structure.last.edited" value="SDKs" />
     <property name="project.structure.proportion" value="0.0" />
-    <property name="project.structure.side.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.2" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
-    <property name="settings.editor.selected.configurable" value="preferences.sourceCode.Java" />
+    <property name="settings.editor.selected.configurable" value="project.propCompiler" />
   </component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
@@ -391,13 +392,21 @@
       <option name="project" value="LOCAL" />
       <updated>1576515978034</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Mutators inclusive NegateConditionalsMutator&#10;new Path-algo is required. Greedy?">
+      <created>1576625284251</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1576625284251</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Defect4J included" />
     <MESSAGE value="Smarter Expand and switched to pitest" />
-    <option name="LAST_COMMIT_MESSAGE" value="Smarter Expand and switched to pitest" />
+    <MESSAGE value="Mutators inclusive NegateConditionalsMutator&#10;new Path-algo is required. Greedy?" />
+    <option name="LAST_COMMIT_MESSAGE" value="Mutators inclusive NegateConditionalsMutator&#10;new Path-algo is required. Greedy?" />
   </component>
   <component name="WindowStateProjectService">
     <state x="414" y="177" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1576516540495">
@@ -405,10 +414,10 @@
     </state>
     <state x="414" y="177" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040/1920.0.1680.1010@0.0.1920.1040" timestamp="1575812329740" />
     <state x="414" y="177" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040/1920.32.1680.1010@0.0.1920.1040" timestamp="1576516540495" />
-    <state x="765" y="226" key="#com.intellij.ide.util.MemberChooser" timestamp="1575910493816">
+    <state x="765" y="226" key="#com.intellij.ide.util.MemberChooser" timestamp="1576686607853">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="765" y="226" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040/1920.0.1680.1010@0.0.1920.1040" timestamp="1575910493816" />
+    <state x="765" y="226" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040/1920.0.1680.1010@0.0.1920.1040" timestamp="1576686607853" />
     <state x="765" y="226" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040/1920.32.1680.1010@0.0.1920.1040" timestamp="1575749063629" />
     <state x="689" y="309" key="#com.intellij.ide.util.TreeClassChooserDialog" timestamp="1575812086668">
       <screen x="0" y="0" width="1920" height="1040" />
@@ -422,66 +431,70 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="662" y="379" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1920.1040/1920.0.1680.1010@0.0.1920.1040" timestamp="1575905045635" />
-    <state x="311" y="125" key="CommitChangelistDialog2" timestamp="1576620014825">
+    <state x="760" y="145" key="CommitChangelistDialog2" timestamp="1576625277990">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="0" y="114" key="CommitChangelistDialog2/0.0.1920.1040/1920.0.1680.1010@0.0.1920.1040" timestamp="1575810833157" />
-    <state x="311" y="125" key="CommitChangelistDialog2/0.0.1920.1040/1920.32.1680.1010@0.0.1920.1040" timestamp="1576620014825" />
-    <state width="1000" height="911" key="DebuggerActiveHint" timestamp="1576624906788">
+    <state x="760" y="145" key="CommitChangelistDialog2/0.0.1920.1040/1920.32.1680.1010@0.0.1920.1040" timestamp="1576625277990" />
+    <state width="998" height="993" key="DebuggerActiveHint" timestamp="1576697272041">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="998" height="993" key="DebuggerActiveHint/0.0.1920.1040/1920.0.1680.1010@0.0.1920.1040" timestamp="1576609169392" />
+    <state width="998" height="993" key="DebuggerActiveHint/0.0.1920.1040/1920.0.1680.1010@0.0.1920.1040" timestamp="1576697272041" />
     <state width="1000" height="911" key="DebuggerActiveHint/0.0.1920.1040/1920.32.1680.1010@0.0.1920.1040" timestamp="1576624906788" />
-    <state width="1877" height="354" key="GridCell.Tab.0.bottom" timestamp="1576625204431">
+    <state width="1877" height="263" key="GridCell.Tab.0.bottom" timestamp="1576700181069">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="324" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1680.1010@0.0.1920.1040" timestamp="1576609171252" />
-    <state width="1877" height="354" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.32.1680.1010@0.0.1920.1040" timestamp="1576625204431" />
-    <state width="1877" height="354" key="GridCell.Tab.0.center" timestamp="1576625204430">
+    <state width="1877" height="263" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1680.1010@0.0.1920.1040" timestamp="1576697193241" />
+    <state width="1877" height="263" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.32.1680.1010@0.0.1920.1040" timestamp="1576700181069" />
+    <state width="1877" height="263" key="GridCell.Tab.0.center" timestamp="1576700181069">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="324" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1680.1010@0.0.1920.1040" timestamp="1576609171252" />
-    <state width="1877" height="354" key="GridCell.Tab.0.center/0.0.1920.1040/1920.32.1680.1010@0.0.1920.1040" timestamp="1576625204430" />
-    <state width="1877" height="354" key="GridCell.Tab.0.left" timestamp="1576625204430">
+    <state width="1877" height="263" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1680.1010@0.0.1920.1040" timestamp="1576697193241" />
+    <state width="1877" height="263" key="GridCell.Tab.0.center/0.0.1920.1040/1920.32.1680.1010@0.0.1920.1040" timestamp="1576700181069" />
+    <state width="1877" height="263" key="GridCell.Tab.0.left" timestamp="1576700181069">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="324" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1680.1010@0.0.1920.1040" timestamp="1576609171252" />
-    <state width="1877" height="354" key="GridCell.Tab.0.left/0.0.1920.1040/1920.32.1680.1010@0.0.1920.1040" timestamp="1576625204430" />
-    <state width="1877" height="354" key="GridCell.Tab.0.right" timestamp="1576625204431">
+    <state width="1877" height="263" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1680.1010@0.0.1920.1040" timestamp="1576697193241" />
+    <state width="1877" height="263" key="GridCell.Tab.0.left/0.0.1920.1040/1920.32.1680.1010@0.0.1920.1040" timestamp="1576700181069" />
+    <state width="1877" height="263" key="GridCell.Tab.0.right" timestamp="1576700181069">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="324" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1680.1010@0.0.1920.1040" timestamp="1576609171252" />
-    <state width="1877" height="354" key="GridCell.Tab.0.right/0.0.1920.1040/1920.32.1680.1010@0.0.1920.1040" timestamp="1576625204431" />
-    <state width="1877" height="354" key="GridCell.Tab.1.bottom" timestamp="1576625204431">
+    <state width="1877" height="263" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1680.1010@0.0.1920.1040" timestamp="1576697193241" />
+    <state width="1877" height="263" key="GridCell.Tab.0.right/0.0.1920.1040/1920.32.1680.1010@0.0.1920.1040" timestamp="1576700181069" />
+    <state width="1877" height="263" key="GridCell.Tab.1.bottom" timestamp="1576700181070">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="324" key="GridCell.Tab.1.bottom/0.0.1920.1040/1920.0.1680.1010@0.0.1920.1040" timestamp="1576609171252" />
-    <state width="1877" height="354" key="GridCell.Tab.1.bottom/0.0.1920.1040/1920.32.1680.1010@0.0.1920.1040" timestamp="1576625204431" />
-    <state width="1877" height="354" key="GridCell.Tab.1.center" timestamp="1576625204431">
+    <state width="1877" height="263" key="GridCell.Tab.1.bottom/0.0.1920.1040/1920.0.1680.1010@0.0.1920.1040" timestamp="1576697193241" />
+    <state width="1877" height="263" key="GridCell.Tab.1.bottom/0.0.1920.1040/1920.32.1680.1010@0.0.1920.1040" timestamp="1576700181070" />
+    <state width="1877" height="263" key="GridCell.Tab.1.center" timestamp="1576700181070">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="324" key="GridCell.Tab.1.center/0.0.1920.1040/1920.0.1680.1010@0.0.1920.1040" timestamp="1576609171252" />
-    <state width="1877" height="354" key="GridCell.Tab.1.center/0.0.1920.1040/1920.32.1680.1010@0.0.1920.1040" timestamp="1576625204431" />
-    <state width="1877" height="354" key="GridCell.Tab.1.left" timestamp="1576625204431">
+    <state width="1877" height="263" key="GridCell.Tab.1.center/0.0.1920.1040/1920.0.1680.1010@0.0.1920.1040" timestamp="1576697193241" />
+    <state width="1877" height="263" key="GridCell.Tab.1.center/0.0.1920.1040/1920.32.1680.1010@0.0.1920.1040" timestamp="1576700181070" />
+    <state width="1877" height="263" key="GridCell.Tab.1.left" timestamp="1576700181069">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="324" key="GridCell.Tab.1.left/0.0.1920.1040/1920.0.1680.1010@0.0.1920.1040" timestamp="1576609171252" />
-    <state width="1877" height="354" key="GridCell.Tab.1.left/0.0.1920.1040/1920.32.1680.1010@0.0.1920.1040" timestamp="1576625204431" />
-    <state width="1877" height="354" key="GridCell.Tab.1.right" timestamp="1576625204431">
+    <state width="1877" height="263" key="GridCell.Tab.1.left/0.0.1920.1040/1920.0.1680.1010@0.0.1920.1040" timestamp="1576697193241" />
+    <state width="1877" height="263" key="GridCell.Tab.1.left/0.0.1920.1040/1920.32.1680.1010@0.0.1920.1040" timestamp="1576700181069" />
+    <state width="1877" height="263" key="GridCell.Tab.1.right" timestamp="1576700181070">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="324" key="GridCell.Tab.1.right/0.0.1920.1040/1920.0.1680.1010@0.0.1920.1040" timestamp="1576609171252" />
-    <state width="1877" height="354" key="GridCell.Tab.1.right/0.0.1920.1040/1920.32.1680.1010@0.0.1920.1040" timestamp="1576625204431" />
-    <state x="594" y="122" key="SettingsEditor" timestamp="1576622646444">
+    <state width="1877" height="263" key="GridCell.Tab.1.right/0.0.1920.1040/1920.0.1680.1010@0.0.1920.1040" timestamp="1576697193241" />
+    <state width="1877" height="263" key="GridCell.Tab.1.right/0.0.1920.1040/1920.32.1680.1010@0.0.1920.1040" timestamp="1576700181070" />
+    <state x="669" y="178" key="SettingsEditor" timestamp="1576685395134">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="669" y="178" key="SettingsEditor/0.0.1920.1040/1920.0.1680.1010@0.0.1920.1040" timestamp="1575905107441" />
+    <state x="669" y="178" key="SettingsEditor/0.0.1920.1040/1920.0.1680.1010@0.0.1920.1040" timestamp="1576685395134" />
     <state x="594" y="122" key="SettingsEditor/0.0.1920.1040/1920.32.1680.1010@0.0.1920.1040" timestamp="1576622646444" />
-    <state x="552" y="252" key="Vcs.Push.Dialog.v2" timestamp="1575837672632">
+    <state x="552" y="252" key="Vcs.Push.Dialog.v2" timestamp="1576625290372">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="552" y="252" key="Vcs.Push.Dialog.v2/0.0.1920.1040/1920.0.1680.1010@0.0.1920.1040" timestamp="1575463492863" />
-    <state x="552" y="252" key="Vcs.Push.Dialog.v2/0.0.1920.1040/1920.32.1680.1010@0.0.1920.1040" timestamp="1575837672632" />
+    <state x="552" y="252" key="Vcs.Push.Dialog.v2/0.0.1920.1040/1920.32.1680.1010@0.0.1920.1040" timestamp="1576625290372" />
+    <state width="968" height="528" key="XDebugger.FullValuePopup" timestamp="1576678466403">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="968" height="528" key="XDebugger.FullValuePopup/0.0.1920.1040/1920.0.1680.1010@0.0.1920.1040" timestamp="1576678466403" />
     <state x="92" y="92" width="1736" height="856" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1575909883305">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -504,24 +517,23 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="605" y="252" width="709" height="536" key="find.popup/0.0.1920.1040/1920.0.1680.1010@0.0.1920.1040" timestamp="1575730342776" />
+    <state x="601" y="246" width="700" height="530" key="recent.locations.popup" timestamp="1576679156161">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="601" y="246" width="700" height="530" key="recent.locations.popup/0.0.1920.1040/1920.0.1680.1010@0.0.1920.1040" timestamp="1576679156161" />
     <state x="616" y="240" key="run.anything.popup" timestamp="1575725115824">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="616" y="240" key="run.anything.popup/0.0.1920.1040/1920.0.1680.1010@0.0.1920.1040" timestamp="1575725115824" />
-    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1576619298965">
+    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1576686983459">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040/1920.0.1680.1010@0.0.1920.1040" timestamp="1576608007370" />
+    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040/1920.0.1680.1010@0.0.1920.1040" timestamp="1576686983459" />
     <state x="623" y="225" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040/1920.32.1680.1010@0.0.1920.1040" timestamp="1576619298965" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/DiffTree.java</url>
-          <line>111</line>
-          <option name="timeStamp" value="113" />
-        </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/ActionExecutor.java</url>
           <line>50</line>
@@ -529,13 +541,19 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/mutators/pitest/IncrementsMutator.java</url>
-          <line>201</line>
-          <option name="timeStamp" value="222" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/mutators/pitest/IncrementsMutator.java</url>
           <line>66</line>
           <option name="timeStamp" value="223" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <condition expression="possibleMutations.size()&gt;=6 &amp;&amp; depth==0" language="JAVA" />
+          <url>file://$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/GreedySearch.java</url>
+          <line>83</line>
+          <option name="timeStamp" value="392" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/DiffTree.java</url>
+          <line>136</line>
+          <option name="timeStamp" value="393" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
@@ -549,16 +567,16 @@
     </breakpoint-manager>
     <watches-manager>
       <configuration name="Remote">
-        <watch expression="delete.getNode()" language="JAVA" custom="com.github.gumtreediff.tree.Tree,com.github.gumtreediff.actions.model.Insert,com.github.gumtreediff.actions.model.Delete" />
-        <watch expression="insert.getParent()" language="JAVA" />
-        <watch expression="insert.getPosition()" language="JAVA" />
+        <watch expression="((ArrayList) actions).size()" language="JAVA" custom="com.github.gumtreediff.tree.Tree,com.github.gumtreediff.actions.model.Insert,com.github.gumtreediff.actions.model.Delete" />
+        <watch expression="depth" language="JAVA" />
+        <watch expression="operatorPossibleMutation" language="JAVA" />
         <watch expression="results.get(0).tree.toTreeString()" language="JAVA" />
         <watch expression="actions" />
       </configuration>
     </watches-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/mutaSHARK$Defects4JRunner.ic" NAME="Defects4JRunner Coverage Results" MODIFIED="1575915507328" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="coverage/mutaSHARK$Defects4JRunner.ic" NAME="Defects4JRunner Coverage Results" MODIFIED="1576685438060" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
     <SUITE FILE_PATH="coverage/mutaSHARK$TestClassRunner.ic" NAME="TestClassRunner Coverage Results" MODIFIED="1575986314033" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
   </component>
 </project>

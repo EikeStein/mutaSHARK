@@ -43,7 +43,7 @@ public class SearchNode
         return previousSearchNode;
     }
 
-    public double getTotalCost()
+    public double getTotalCost() throws TooManyActionsException
     {
         return getPreviousCost() + getHeuristicCost();
     }
@@ -76,10 +76,19 @@ public class SearchNode
         return Objects.hash(currentTreeNode);
     }
 
-    public double getHeuristicCost()
+    public Double getHeuristicCost()
     {
         if (heuristicCost == null)
-            heuristicCost = heuristic.getHeuristic(currentTreeNode);
+        {
+            try
+            {
+                heuristicCost = heuristic.getHeuristic(currentTreeNode);
+            }
+            catch (TooManyActionsException e)
+            {
+                return null;
+            }
+        }
         return heuristicCost;
     }
 

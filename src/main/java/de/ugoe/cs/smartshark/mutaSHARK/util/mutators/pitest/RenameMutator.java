@@ -4,7 +4,8 @@ import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.actions.model.Delete;
 import com.github.gumtreediff.actions.model.Insert;
 import com.github.gumtreediff.tree.ITree;
-import de.ugoe.cs.smartshark.mutaSHARK.util.*;
+import de.ugoe.cs.smartshark.mutaSHARK.util.TreeHelper;
+import de.ugoe.cs.smartshark.mutaSHARK.util.TreeNode;
 import de.ugoe.cs.smartshark.mutaSHARK.util.mutators.MutatedNode;
 
 import java.util.ArrayList;
@@ -50,6 +51,16 @@ public class RenameMutator extends PitestMutator
             }
         }
         return results;
+    }
+
+    private static int iggf = 1000;
+    private int r = -1;
+
+    @Override
+    public double getExpectedCost()
+    {
+        r = iggf++;
+        return r;
     }
 }
 

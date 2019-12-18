@@ -12,7 +12,7 @@ public class Heuristic extends HeuristicBase
     }
 
     @Override
-    protected double getHeuristicInternal(TreeNode fromNode)
+    protected double getHeuristicInternal(TreeNode fromNode) throws TooManyActionsException
     {
         int actionCount = new DiffTree(fromNode.getTree(), destinationNode.getTree(), true).getActions().size();
 

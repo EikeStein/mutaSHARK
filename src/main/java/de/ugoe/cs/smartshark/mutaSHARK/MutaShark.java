@@ -34,9 +34,9 @@ public class MutaShark
 
         TreeNode toNode = getCleanedUpTree(treeTo); // new TreeNode(TreeHelper.updateTree(treeTo.getRoot()));
         TreeNode fromNode = getCleanedUpTree(treeFrom); // new TreeNode(TreeHelper.updateTree(treeTo.getRoot()));
-        AStarSearch aStarSearch = new AStarSearch(fromNode, toNode);
+        GreedySearch search = new GreedySearch(fromNode, toNode);
 
-        searchResult = aStarSearch.findPaths(new SearchSettings(5, 5, toNode, Arrays.asList(startUpOptions.mutations)));
+        searchResult = search.findPaths(new SearchSettings(4, 100, toNode, Arrays.asList(startUpOptions.mutations)));
 
         if (searchResult.foundPaths.size() == 0)
         {

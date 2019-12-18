@@ -24,6 +24,8 @@ public class Defects4JRunner
     private static void handleBugFix(Defects4JBugFix bugFix) throws ClassNotFoundException, IOException, InstantiationException, IllegalAccessException
     {
         total++;
+        if(total<0)
+            return;
         try
         {
             MutaShark.main(new String[]{bugFix.buggyClassFile, bugFix.fixedClassFile, "-m", "pitest"});

@@ -18,7 +18,7 @@ public abstract class HeuristicBase
         this.mutationOperators = mutationOperators;
     }
 
-    public double getHeuristic(TreeNode fromNode)
+    public double getHeuristic(TreeNode fromNode) throws TooManyActionsException
     {
         if (!cachedHeuristics.containsKey(fromNode))
         {
@@ -28,6 +28,6 @@ public abstract class HeuristicBase
         return cachedHeuristics.get(fromNode);
     }
 
-    protected abstract double getHeuristicInternal(TreeNode fromNode);
+    protected abstract double getHeuristicInternal(TreeNode fromNode) throws TooManyActionsException;
 }
 

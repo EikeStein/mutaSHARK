@@ -130,7 +130,7 @@ public class InvertNegativesMutator extends PitestMutator
                                 }
                                 ITree deepCopy = treeNode.getTree().deepCopy();
                                 TreeNode clonedTree = new TreeNode(deepCopy);
-                                String url = TreeHelper.getUrl(parent, Integer.MAX_VALUE);
+                                String url = TreeHelper.getUrl(delete.getNode().getParent(), Integer.MAX_VALUE);
                                 TreeNode parentNode = new TreeNode(clonedTree.getTree().getChild(url));
                                 parentNode.removeChildAt(insertPrefix.getPosition());
                                 parentNode.getTree().insertChild(insertPrefix.getNode().deepCopy(), insertPrefix.getPosition());
@@ -142,6 +142,12 @@ public class InvertNegativesMutator extends PitestMutator
             }
         }
         return results;
+    }
+
+    @Override
+    public double getExpectedCost()
+    {
+        return 1;
     }
 
     private List<MutatedNode> getPossibleRemoveMutations(TreeNode treeNode, TreeNode target, List<Action> actions)
