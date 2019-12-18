@@ -14,10 +14,4 @@ public class ArithmeticOperatorDeletionShortCutMutator extends ArithmeticOperato
     {
         return null;
     }
-
-    @Override
-    public double getExpectedCost()
-    {
-        return 1;
-    }
 }

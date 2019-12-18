@@ -110,18 +110,18 @@ public class TreeHelper
         return url;
     }
 
-    private static int getChildPosition(ITree parent, ITree child)
+    public static String getLabelInside(ITree node)
     {
-        List<ITree> children = parent.getChildren();
-        for (int i = 0; i < children.size(); i++)
+        if (node == null)
         {
-            ITree actualChild = children.get(i);
-            if (actualChild.isIsomorphicTo(child))
-            {
-                return i;
-            }
+            return "";
         }
-        return -1;
+        StringBuilder returnValue = new StringBuilder(node.getLabel());
+        for (ITree child : node.getChildren())
+        {
+            returnValue.append(getLabelInside(child));
+        }
+        return returnValue.toString();
     }
 
     public static boolean urlEqual(ITree node1, ITree node2, boolean removeLeadingZeros)
@@ -172,5 +172,19 @@ public class TreeHelper
             }
         }
         return result;
+    }
+
+    private static int getChildPosition(ITree parent, ITree child)
+    {
+        List<ITree> children = parent.getChildren();
+        for (int i = 0; i < children.size(); i++)
+        {
+            ITree actualChild = children.get(i);
+            if (actualChild.isIsomorphicTo(child))
+            {
+                return i;
+            }
+        }
+        return -1;
     }
 }

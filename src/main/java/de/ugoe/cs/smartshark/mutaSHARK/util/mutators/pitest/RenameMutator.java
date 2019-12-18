@@ -52,15 +52,5 @@ public class RenameMutator extends PitestMutator
         }
         return results;
     }
-
-    private static int iggf = 1000;
-    private int r = -1;
-
-    @Override
-    public double getExpectedCost()
-    {
-        r = iggf++;
-        return r;
-    }
 }
 

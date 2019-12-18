@@ -13,12 +13,6 @@ import java.util.List;
 public class ShiftOperatorReplacementMutator extends MujavaMutator
 {
 
-
-    @Override
-    public double getExpectedCost()
-    {
-        return 1;
-    }
     @Override
     public List<MutatedNode> getPossibleMutations(TreeNode treeNode, TreeNode target, List<Action> actions)
     {

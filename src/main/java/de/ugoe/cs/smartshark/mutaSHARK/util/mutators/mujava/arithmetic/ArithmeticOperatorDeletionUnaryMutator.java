@@ -16,10 +16,4 @@ public class ArithmeticOperatorDeletionUnaryMutator extends ArithmeticOperatorDe
     {
         return null;
     }
-
-    @Override
-    public double getExpectedCost()
-    {
-        return 1;
-    }
 }

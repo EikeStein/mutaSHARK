@@ -144,12 +144,6 @@ public class InvertNegativesMutator extends PitestMutator
         return results;
     }
 
-    @Override
-    public double getExpectedCost()
-    {
-        return 1;
-    }
-
     private List<MutatedNode> getPossibleRemoveMutations(TreeNode treeNode, TreeNode target, List<Action> actions)
     {
         ArrayList<MutatedNode> results = new ArrayList<>();

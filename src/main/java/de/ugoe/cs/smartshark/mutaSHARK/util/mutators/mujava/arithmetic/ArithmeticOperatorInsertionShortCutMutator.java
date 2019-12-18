@@ -16,12 +16,6 @@ public class ArithmeticOperatorInsertionShortCutMutator extends ArithmeticOperat
 {
 
     @Override
-    public double getExpectedCost()
-    {
-        return 1;
-    }
-
-    @Override
     public List<MutatedNode> getPossibleMutations(TreeNode treeNode, TreeNode target, List<Action> actions)
     {
         List<String> names = TreeHelper.getNames(target.getTree()).stream().distinct().collect(Collectors.toList());

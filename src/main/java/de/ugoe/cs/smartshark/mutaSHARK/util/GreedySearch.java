@@ -80,7 +80,7 @@ public class GreedySearch implements ISearchAlgorithm
         actions = null;
 
         List<SearchNode> priorityQueue = new ArrayList<>();
-        possibleMutations.sort(Comparator.comparingDouble(m->m.getMutationOperator().getExpectedCost()));
+        possibleMutations.sort(Comparator.comparingDouble(MutatedNode::getCost));
         for (MutatedNode operatorPossibleMutation : possibleMutations)
         {
             if (priorityQueue.size() >= searchSettings.maxFoundPaths)

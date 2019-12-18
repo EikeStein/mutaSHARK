@@ -64,12 +64,6 @@ public class ConditionalsBoundaryMutator extends PitestMutator
         return results;
     }
 
-    @Override
-    public double getExpectedCost()
-    {
-        return 1;
-    }
-
     private boolean supportsLabelTransition(String originalLabel, String newLabel)
     {
         switch (originalLabel)
