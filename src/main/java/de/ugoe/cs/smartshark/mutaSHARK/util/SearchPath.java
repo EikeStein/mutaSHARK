@@ -7,9 +7,13 @@ public class SearchPath
 {
     public final List<SearchEdge> edges = new ArrayList<>();
     public final double totalCost;
+    public final int totalActionCount;
+    public final int remainingActionCount;
 
-    public SearchPath(SearchNode finalNode) throws TooManyActionsException
+    public SearchPath(SearchNode finalNode, int totalActionCount, int remainingActionCount) throws TooManyActionsException
     {
+        this.totalActionCount = totalActionCount;
+        this.remainingActionCount = remainingActionCount;
         SearchNode currentNode = finalNode;
         while (currentNode != null)
         {

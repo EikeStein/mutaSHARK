@@ -174,6 +174,48 @@ public class TreeHelper
         return result;
     }
 
+    public static String getDeclarationType(ITree node, String name)
+    {
+        ITree current = node.getParent();
+        while (current != null)
+        {
+            for (ITree child : current.getChildren())
+            {
+                final String childName = child.getType().name;
+                if (childName.equals("SingleVariableDeclaration") || childName.equals("VariableDeclarationStatement"))
+                {
+                    if (child.getChildren().size() < 2)
+                    {
+                        continue;
+                    }
+                    final String type = child.getChildren().get(0).getLabel();
+                    if (child.getChildren().get(1).getType().name.equals("SimpleName") || child.getChildren().get(1).getType().name.equals("QualifiedName"))
+                    {
+                        if (!child.getChildren().get(1).getLabel().equals(name))
+                        {
+                            continue;
+                        }
+                        return type;
+                    }
+                    if (child.getChildren().get(1).getType().name.equals("VariableDeclarationFragment"))
+                    {
+                        if (child.getChildren().get(1).getChildren().size() != 2)
+                        {
+                            continue;
+                        }
+                        if (!child.getChildren().get(1).getChildren().get(0).getLabel().equals(name))
+                        {
+                            continue;
+                        }
+                        return type;
+                    }
+                }
+            }
+            current = current.getParent();
+        }
+        return "";
+    }
+
     private static int getChildPosition(ITree parent, ITree child)
     {
         List<ITree> children = parent.getChildren();

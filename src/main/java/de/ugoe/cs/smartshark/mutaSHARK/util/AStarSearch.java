@@ -42,7 +42,7 @@ public class AStarSearch implements ISearchAlgorithm
             closedList.addAll(prunedNodes);
             if (currentNode.getCurrentTreeNode().getTree().isIsomorphicTo(toNode.getTree()))
             {
-                foundPaths.add(new SearchPath(currentNode));
+                foundPaths.add(new SearchPath(currentNode, new DiffTree(fromNode.getTree(), toNode.getTree()).getActions().size(), new DiffTree(currentNode.getCurrentTreeNode().getTree(), toNode.getTree()).getActions().size()));
             }
             else
             {
@@ -60,7 +60,7 @@ public class AStarSearch implements ISearchAlgorithm
         for (int i = 0; i < closedList.size() && i < searchSettings.maxFoundPaths; i++)
         {
             SearchNode searchNode = closedList.get(i);
-            result.add(new SearchPath(searchNode));
+            result.add(new SearchPath(searchNode, new DiffTree(fromNode.getTree(), toNode.getTree()).getActions().size(), new DiffTree(searchNode.getCurrentTreeNode().getTree(), toNode.getTree()).getActions().size()));
         }
         return result;
     }
@@ -72,7 +72,7 @@ public class AStarSearch implements ISearchAlgorithm
         {
             return;
         }
-        List<Action> actions = new DiffTree(treeNode.getTree(), toNode.getTree(), true).getActions();
+        List<Action> actions = new DiffTree(treeNode.getTree(), toNode.getTree()).getActions();
         if (actions.size() > maxActions)
         {
             throw new TooManyActionsException(actions.size());

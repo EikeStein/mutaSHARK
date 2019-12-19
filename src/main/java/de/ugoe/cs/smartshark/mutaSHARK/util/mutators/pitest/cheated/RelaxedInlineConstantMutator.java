@@ -9,9 +9,10 @@ import de.ugoe.cs.smartshark.mutaSHARK.util.mutators.MutatedNode;
 import de.ugoe.cs.smartshark.mutaSHARK.util.mutators.pitest.PitestMutator;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-public class RelaxedReturnValuesMutator extends PitestMutator
+public class RelaxedInlineConstantMutator extends PitestMutator
 {
     @Override
     public List<MutatedNode> getPossibleMutations(TreeNode treeNode, TreeNode target, List<Action> actions)
@@ -19,67 +20,11 @@ public class RelaxedReturnValuesMutator extends PitestMutator
         List<MutatedNode> results = new ArrayList<>();
 
         results.addAll(getPossibleBooleanMutations(treeNode, actions));
-        results.addAll(getPossibleObjectMutations(treeNode, actions));
         results.addAll(getPossibleIntByteShortNumberMutations(treeNode, actions));
         results.addAll(getPossibleLongNumberMutations(treeNode, actions));
-        results.addAll(getPossibleFloatDoubleNumberMutations(treeNode, actions));
+        results.addAll(getPossibleFloatNumberMutations(treeNode, actions));
+        results.addAll(getPossibleDoubleNumberMutations(treeNode, actions));
 
-        return results;
-    }
-
-    private List<MutatedNode> getPossibleObjectMutations(TreeNode treeNode, List<Action> actions)
-    {
-        List<MutatedNode> results = new ArrayList<>();
-        for (int i = 0; i < actions.size(); i++)
-        {
-            if (actions.get(i) instanceof Insert || actions.get(i) instanceof TreeInsert)
-            {
-                InsertWrapper insert = new InsertWrapper(actions.get(i));
-                if (!insert.getNode().getType().name.equals("ReturnStatement"))
-                {
-                    continue;
-                }
-                if (insert.getNode().getChildren().size() != 1)
-                {
-                    continue;
-                }
-                if (!insert.getNode().getChildren().get(0).getType().name.equals("NullLiteral"))
-                {
-                    continue;
-                }
-                for (int j = 0; j < actions.size(); j++)
-                {
-                    if (actions.get(j) instanceof Delete || actions.get(j) instanceof TreeDelete)
-                    {
-                        Action delete = actions.get(j);
-                        if (!delete.getNode().getType().name.equals("ReturnStatement"))
-                        {
-                            continue;
-                        }
-                        if (delete.getNode().getParent() != insert.getParent())
-                        {
-                            continue;
-                        }
-                        if (delete.getNode().getChildren().size() != 1)
-                        {
-                            continue;
-                        }
-                        if (!delete.getNode().getChildren().get(0).getType().name.equals("ClassInstanceCreation"))
-                        {
-                            continue;
-                        }
-                        ITree copy = treeNode.getTree().deepCopy();
-                        TreeNode clonedTree = new TreeNode(copy);
-                        String url = TreeHelper.getUrl(delete.getNode().getParent(), Integer.MAX_VALUE);
-                        TreeNode newParent = new TreeNode(clonedTree.getTree().getChild(url));
-                        int positionInParent = delete.getNode().positionInParent();
-                        newParent.removeChildAt(positionInParent);
-                        newParent.getTree().insertChild(insert.getNode().deepCopy(), positionInParent);
-                        results.add(new MutatedNode(clonedTree, this, 50, "Cheated-Replaced return object " + TreeHelper.findNodes(delete.getNode(), "SimpleName", Integer.MAX_VALUE).get(0).getLabel() + " with null @~" + delete.getNode().getPos()));
-                    }
-                }
-            }
-        }
         return results;
     }
 
@@ -95,7 +40,11 @@ public class RelaxedReturnValuesMutator extends PitestMutator
                 {
                     continue;
                 }
-                if (!insert.getParent().getType().name.equals("ReturnStatement"))
+                if (!insert.getParent().getType().name.equals("Assignment") && !insert.getParent().getType().name.equals("VariableDeclarationFragment"))
+                {
+                    continue;
+                }
+                if (!Arrays.asList(new String[]{"boolean", "Boolean"}).contains(TreeHelper.getDeclarationType(insert.getParent().getChildren().get(0), TreeHelper.getLabelInside(insert.getParent().getChildren().get(0)))))
                 {
                     continue;
                 }
@@ -125,7 +74,7 @@ public class RelaxedReturnValuesMutator extends PitestMutator
                         int positionInParent = delete.getNode().positionInParent();
                         newParent.removeChildAt(positionInParent);
                         newParent.getTree().insertChild(insert.getNode().deepCopy(), positionInParent);
-                        results.add(new MutatedNode(clonedTree, this, 50, "Cheated-Replaced return boolean " + oldLabel + " with " + newLabel + " @~" + delete.getNode().getPos()));
+                        results.add(new MutatedNode(clonedTree, this, 75, "Cheated-Replaced inline boolean " + oldLabel + " with " + newLabel + " @~" + delete.getNode().getPos()));
                     }
                 }
             }
@@ -145,11 +94,11 @@ public class RelaxedReturnValuesMutator extends PitestMutator
                 {
                     continue;
                 }
-                if (!insert.getParent().getType().name.equals("ReturnStatement"))
+                if (!insert.getParent().getType().name.equals("Assignment") && !insert.getParent().getType().name.equals("VariableDeclarationFragment"))
                 {
                     continue;
                 }
-                if (!isInMethodWithReturnType(insert.getNode(), "int", "byte", "short", "Integer", "Byte", "Short"))
+                if (!Arrays.asList(new String[]{"int", "byte", "short", "Integer", "Byte", "Short"}).contains(TreeHelper.getDeclarationType(insert.getParent().getChildren().get(0), TreeHelper.getLabelInside(insert.getParent().getChildren().get(0)))))
                 {
                     continue;
                 }
@@ -167,10 +116,6 @@ public class RelaxedReturnValuesMutator extends PitestMutator
                         {
                             continue;
                         }
-                        if (!isInMethodWithReturnType(delete.getNode(), "int", "byte", "short", "Integer", "Byte", "Short"))
-                        {
-                            continue;
-                        }
                         String oldLabel = TreeHelper.getLabelInside(delete.getNode());
                         if (!isIntByteShortReplaceSupported(oldLabel, newLabel))
                         {
@@ -183,7 +128,7 @@ public class RelaxedReturnValuesMutator extends PitestMutator
                         int positionInParent = delete.getNode().positionInParent();
                         newParent.removeChildAt(positionInParent);
                         newParent.getTree().insertChild(insert.getNode().deepCopy(), positionInParent);
-                        results.add(new MutatedNode(clonedTree, this, 50, "Cheated-Replaced return shortbyteint " + oldLabel + " with " + newLabel + " @~" + delete.getNode().getPos()));
+                        results.add(new MutatedNode(clonedTree, this, 75, "Cheated-Replaced inline shortbyteint " + oldLabel + " with " + newLabel + " @~" + delete.getNode().getPos()));
                     }
                 }
             }
@@ -203,11 +148,11 @@ public class RelaxedReturnValuesMutator extends PitestMutator
                 {
                     continue;
                 }
-                if (!insert.getParent().getType().name.equals("ReturnStatement"))
+                if (!insert.getParent().getType().name.equals("Assignment") && !insert.getParent().getType().name.equals("VariableDeclarationFragment"))
                 {
                     continue;
                 }
-                if (!isInMethodWithReturnType(insert.getNode(), "long", "Long"))
+                if (!Arrays.asList(new String[]{"long", "Long"}).contains(TreeHelper.getDeclarationType(insert.getParent().getChildren().get(0), TreeHelper.getLabelInside(insert.getParent().getChildren().get(0)))))
                 {
                     continue;
                 }
@@ -225,10 +170,6 @@ public class RelaxedReturnValuesMutator extends PitestMutator
                         {
                             continue;
                         }
-                        if (!isInMethodWithReturnType(delete.getNode(), "long", "Long"))
-                        {
-                            continue;
-                        }
                         String oldLabel = TreeHelper.getLabelInside(delete.getNode());
                         if (!isLongReplaceSupported(oldLabel, newLabel))
                         {
@@ -241,7 +182,7 @@ public class RelaxedReturnValuesMutator extends PitestMutator
                         int positionInParent = delete.getNode().positionInParent();
                         newParent.removeChildAt(positionInParent);
                         newParent.getTree().insertChild(insert.getNode().deepCopy(), positionInParent);
-                        results.add(new MutatedNode(clonedTree, this, 50, "Cheated-Replaced return long " + oldLabel + " with " + newLabel + " @~" + delete.getNode().getPos()));
+                        results.add(new MutatedNode(clonedTree, this, 75, "Cheated-Replaced inline long " + oldLabel + " with " + newLabel + " @~" + delete.getNode().getPos()));
                     }
                 }
             }
@@ -249,7 +190,7 @@ public class RelaxedReturnValuesMutator extends PitestMutator
         return results;
     }
 
-    private List<MutatedNode> getPossibleFloatDoubleNumberMutations(TreeNode treeNode, List<Action> actions)
+    private List<MutatedNode> getPossibleFloatNumberMutations(TreeNode treeNode, List<Action> actions)
     {
         List<MutatedNode> results = new ArrayList<>();
         for (int i = 0; i < actions.size(); i++)
@@ -261,11 +202,11 @@ public class RelaxedReturnValuesMutator extends PitestMutator
                 {
                     continue;
                 }
-                if (!insert.getParent().getType().name.equals("ReturnStatement"))
+                if (!insert.getParent().getType().name.equals("Assignment") && !insert.getParent().getType().name.equals("VariableDeclarationFragment"))
                 {
                     continue;
                 }
-                if (!isInMethodWithReturnType(insert.getNode(), "double", "Double", "float", "Float"))
+                if (!Arrays.asList(new String[]{"float", "Float"}).contains(TreeHelper.getDeclarationType(insert.getParent().getChildren().get(0), TreeHelper.getLabelInside(insert.getParent().getChildren().get(0)))))
                 {
                     continue;
                 }
@@ -279,7 +220,68 @@ public class RelaxedReturnValuesMutator extends PitestMutator
                         {
                             continue;
                         }
-                        if (!isInMethodWithReturnType(delete.getNode(), "double", "Double", "float", "Float"))
+                        String oldLabel = TreeHelper.getLabelInside(delete.getNode());
+                        if (delete.getNode().getType().name.equals("QualifiedName"))
+                        {
+                            if (!oldLabel.equals("Float.NaN"))
+                            {
+                                continue;
+                            }
+                        }
+                        else
+                        {
+                            if (!delete.getNode().getType().name.equals("NumberLiteral") && !delete.getNode().getType().name.equals("PrefixExpression"))
+                            {
+                                continue;
+                            }
+                        }
+                        if (!isFloatReplaceSupported(oldLabel, newLabel))
+                        {
+                            continue;
+                        }
+                        ITree copy = treeNode.getTree().deepCopy();
+                        TreeNode clonedTree = new TreeNode(copy);
+                        String url = TreeHelper.getUrl(delete.getNode().getParent(), Integer.MAX_VALUE);
+                        TreeNode newParent = new TreeNode(clonedTree.getTree().getChild(url));
+                        int positionInParent = delete.getNode().positionInParent();
+                        newParent.removeChildAt(positionInParent);
+                        newParent.getTree().insertChild(insert.getNode().deepCopy(), positionInParent);
+                        results.add(new MutatedNode(clonedTree, this, 75, "Cheated-Replaced inline float " + oldLabel + " with " + newLabel + " @~" + delete.getNode().getPos()));
+                    }
+
+                }
+            }
+        }
+        return results;
+    }
+
+    private List<MutatedNode> getPossibleDoubleNumberMutations(TreeNode treeNode, List<Action> actions)
+    {
+        List<MutatedNode> results = new ArrayList<>();
+        for (int i = 0; i < actions.size(); i++)
+        {
+            if (actions.get(i) instanceof Insert || actions.get(i) instanceof TreeInsert)
+            {
+                InsertWrapper insert = new InsertWrapper(actions.get(i));
+                if (!insert.getNode().getType().name.equals("NumberLiteral") && !insert.getNode().getType().name.equals("PrefixExpression"))
+                {
+                    continue;
+                }
+                if (!insert.getParent().getType().name.equals("Assignment") && !insert.getParent().getType().name.equals("VariableDeclarationFragment"))
+                {
+                    continue;
+                }
+                if (!Arrays.asList(new String[]{"double", "Double"}).contains(TreeHelper.getDeclarationType(insert.getParent().getChildren().get(0), TreeHelper.getLabelInside(insert.getParent().getChildren().get(0)))))
+                {
+                    continue;
+                }
+                String newLabel = TreeHelper.getLabelInside(insert.getNode());
+                for (int j = 0; j < actions.size(); j++)
+                {
+                    if (actions.get(j) instanceof Delete || actions.get(j) instanceof TreeDelete)
+                    {
+                        Action delete = actions.get(j);
+                        if (delete.getNode().getParent() != insert.getParent())
                         {
                             continue;
                         }
@@ -298,7 +300,7 @@ public class RelaxedReturnValuesMutator extends PitestMutator
                                 continue;
                             }
                         }
-                        if (!isFloatDoubleReplaceSupported(oldLabel, newLabel))
+                        if (!isDoubleReplaceSupported(oldLabel, newLabel))
                         {
                             continue;
                         }
@@ -309,7 +311,7 @@ public class RelaxedReturnValuesMutator extends PitestMutator
                         int positionInParent = delete.getNode().positionInParent();
                         newParent.removeChildAt(positionInParent);
                         newParent.getTree().insertChild(insert.getNode().deepCopy(), positionInParent);
-                        results.add(new MutatedNode(clonedTree, this, 50, "Cheated-Replaced return floatdouble " + oldLabel + " with " + newLabel + " @~" + delete.getNode().getPos()));
+                        results.add(new MutatedNode(clonedTree, this, 75, "Cheated-Replaced return double " + oldLabel + " with " + newLabel + " @~" + delete.getNode().getPos()));
                     }
 
                 }
@@ -346,22 +348,12 @@ public class RelaxedReturnValuesMutator extends PitestMutator
         }
     }
 
-    private boolean isFloatDoubleReplaceSupported(String oldLabel, String newLabel)
+    private boolean isFloatReplaceSupported(String oldLabel, String newLabel)
     {
         try
         {
-            if (oldLabel.equals("Double.NaN"))
-            {
-                Long.parseLong(newLabel);
-                return true;
-            }
-            if (newLabel.equals("Double.NaN"))
-            {
-                Long.parseLong(oldLabel);
-                return true;
-            }
-            Long.parseLong(oldLabel);
-            Long.parseLong(newLabel);
+            Float.parseFloat(oldLabel);
+            Float.parseFloat(newLabel);
             return true;
         }
         catch (NumberFormatException e)
@@ -370,31 +362,18 @@ public class RelaxedReturnValuesMutator extends PitestMutator
         }
     }
 
-    private boolean isInMethodWithReturnType(ITree node, String... returnTypes)
+    private boolean isDoubleReplaceSupported(String oldLabel, String newLabel)
     {
-        ITree current = node;
-        while (current != null && !current.getType().name.equals("MethodDeclaration"))
+        try
         {
-            current = current.getParent();
+            Double.parseDouble(oldLabel);
+            Double.parseDouble(newLabel);
+            return true;
         }
-        if (current == null)
+        catch (NumberFormatException e)
         {
             return false;
         }
-        for (ITree child : current.getChildren())
-        {
-            if (child.getType().name.equals("PrimitiveType"))
-            {
-                for (String returnType : returnTypes)
-                {
-                    if (returnType.equals(child.getLabel()))
-                    {
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
     }
 
     private boolean isBooleanReplaceSupported(String oldLabel, String newLabel)

@@ -12,9 +12,9 @@ public class DiffTree
 {
     private List<Action> actions;
 
-    public DiffTree(ITree treeFrom, ITree treeTo, boolean recursive) throws TooManyActionsException
+    public DiffTree(ITree treeFrom, ITree treeTo) throws TooManyActionsException
     {
-        classify(treeFrom, treeTo, recursive);
+        classify(treeFrom, treeTo);
     }
 
     public List<Action> getActions()
@@ -22,8 +22,9 @@ public class DiffTree
         return actions;
     }
 
-    private void classify(ITree treeFrom, ITree treeTo, boolean recursive) throws TooManyActionsException
+    private void classify(ITree treeFrom, ITree treeTo) throws TooManyActionsException
     {
+        boolean recursive = true;
         EditScriptGenerator chawatheScriptGenerator = new InsertDeleteChawatheScriptGenerator();
         ITree toClone = treeTo.deepCopy();
         ITree fromClone = treeFrom.deepCopy();
@@ -166,7 +167,7 @@ public class DiffTree
         {
             final int s0Size = s0.size();
             final int s1Size = s1.size();
-            if ((s0Size - s1Size) * (s0Size + s1Size) > 1800000)
+            if ((s0Size - s1Size) * (s0Size + s1Size) > 1800000 || s0.size() > 12500 && s1.size() > 12500)
             {
                 throw new TooManyActionsException(s0Size);
             }

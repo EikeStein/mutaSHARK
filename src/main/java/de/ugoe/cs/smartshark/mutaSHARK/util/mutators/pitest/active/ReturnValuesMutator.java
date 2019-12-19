@@ -310,7 +310,7 @@ public class ReturnValuesMutator extends PitestMutator
                         int positionInParent = delete.getNode().positionInParent();
                         newParent.removeChildAt(positionInParent);
                         newParent.getTree().insertChild(insert.getNode().deepCopy(), positionInParent);
-                        results.add(new MutatedNode(clonedTree, this, 1, "Replaced return long " + oldLabel + " with " + newLabel + " @~" + delete.getNode().getPos()));
+                        results.add(new MutatedNode(clonedTree, this, 1, "Replaced return floatdouble " + oldLabel + " with " + newLabel + " @~" + delete.getNode().getPos()));
                     }
 
                 }
@@ -346,12 +346,12 @@ public class ReturnValuesMutator extends PitestMutator
     {
         try
         {
-            final long newValue = Long.parseLong(newLabel);
+            final double newValue = Double.parseDouble(newLabel);
             if (oldLabel.equals("Double.NaN"))
             {
                 return newValue == 0;
             }
-            final long oldValue = Long.parseLong(oldLabel);
+            final double oldValue = Double.parseDouble(oldLabel);
             return newValue == -(oldValue + 1.0);
         }
         catch (NumberFormatException e)

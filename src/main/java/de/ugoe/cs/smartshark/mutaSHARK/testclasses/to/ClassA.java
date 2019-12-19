@@ -1,12 +1,11 @@
 package de.ugoe.cs.smartshark.mutaSHARK.testclasses.to;
 
-import java.util.*;
-
 public class ClassA
 {
-    public Set<String> methodA(int j)
+    public void methodA(boolean j)
     {
-        Set<String> s = new HashSet<>();
-        return s;
+        boolean k = true;
+        float i = 8;
+        k = true;
     }
 }

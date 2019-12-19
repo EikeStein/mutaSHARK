@@ -37,7 +37,7 @@ public class GreedySearch implements ISearchAlgorithm
         boolean newPathFound = false;
         if (current.getCurrentTreeNode().getTree().isIsomorphicTo(to.getCurrentTreeNode().getTree()))
         {
-            SearchPath foundPath = new SearchPath(current);
+            SearchPath foundPath = new SearchPath(current, new DiffTree(fromNode.getTree(), toNode.getTree()).getActions().size(), new DiffTree(current.getCurrentTreeNode().getTree(), toNode.getTree()).getActions().size());
             if (!contains(foundPaths, foundPath))
             {
                 foundPaths.add(foundPath);
@@ -48,7 +48,7 @@ public class GreedySearch implements ISearchAlgorithm
 
         if (depth >= searchSettings.maxHops)
         {
-            SearchPath closest = new SearchPath(current);
+            SearchPath closest = new SearchPath(current, new DiffTree(fromNode.getTree(), toNode.getTree()).getActions().size(), new DiffTree(current.getCurrentTreeNode().getTree(), toNode.getTree()).getActions().size());
             if (!contains(closestPaths, closest))
             {
                 closestPaths.add(closest);
@@ -59,11 +59,11 @@ public class GreedySearch implements ISearchAlgorithm
         {
             return new SearchResult(new ArrayList<>(foundPaths), new ArrayList<>(closestPaths));
         }
-        List<Action> actions = new DiffTree(current.getCurrentTreeNode().getTree(), to.getCurrentTreeNode().getTree(), true).getActions();
+        List<Action> actions = new DiffTree(current.getCurrentTreeNode().getTree(), to.getCurrentTreeNode().getTree()).getActions();
         int actionSize = actions.size();
         if (actionSize == lastActionCount && lastActionCountRepeating >= 3)
         {
-            SearchPath foundPath = new SearchPath(current);
+            SearchPath foundPath = new SearchPath(current, new DiffTree(fromNode.getTree(), toNode.getTree()).getActions().size(), new DiffTree(current.getCurrentTreeNode().getTree(), toNode.getTree()).getActions().size());
             if (!contains(closestPaths, foundPath))
             {
                 closestPaths.add(foundPath);
@@ -122,7 +122,7 @@ public class GreedySearch implements ISearchAlgorithm
 
         if (possibleMutations.size() == 0)
         {
-            SearchPath closestPath = new SearchPath(current);
+            SearchPath closestPath = new SearchPath(current, new DiffTree(fromNode.getTree(), toNode.getTree()).getActions().size(), new DiffTree(current.getCurrentTreeNode().getTree(), toNode.getTree()).getActions().size());
             if (!contains(closestPaths, closestPath))
             {
                 closestPaths.add(closestPath);
