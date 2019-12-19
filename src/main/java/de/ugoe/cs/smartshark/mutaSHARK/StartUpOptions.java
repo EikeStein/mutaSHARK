@@ -13,19 +13,29 @@ public class StartUpOptions
     public final String pathToBug;
     public final String pathToFix;
     public final TreeMutationOperator[] mutations;
+    public final int maxPathCount;
+    public final int maxPathDepth;
 
-    public StartUpOptions(String pathToBug, String pathToFix, TreeMutationOperator... mutations)
+    public StartUpOptions(String pathToBug,
+                          String pathToFix,
+                          TreeMutationOperator[] mutations,
+                          int maxPathCount,
+                          int maxPathDepth)
     {
         this.pathToBug = pathToBug;
         this.pathToFix = pathToFix;
         this.mutations = mutations;
+        this.maxPathCount = maxPathCount;
+        this.maxPathDepth = maxPathDepth;
     }
 
     public static StartUpOptions parseArgs(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException
     {
+        int maxPathCount = 4;
+        int maxPathDepth = 100;
         String pathToBug = "";
         String pathToFix = "";
-        String mutatorPackage = "";
+        List<String> mutatorPackages = new ArrayList<>();
 
         String currentParameter = "b";
         for (String arg : args)
@@ -55,23 +65,49 @@ public class StartUpOptions
                     case "m":
                     case "mutators":
                     {
-                        mutatorPackage = arg.trim();
+                        mutatorPackages.add(arg.trim());
+                        break;
+                    }
+                    case "p":
+                    case "paths":
+                    {
+                        maxPathCount = Integer.parseInt(arg.trim());
+                        break;
+                    }
+                    case "d":
+                    case "depth":
+                    {
+                        maxPathDepth = Integer.parseInt(arg.trim());
                         break;
                     }
                 }
             }
         }
 
-        TreeMutationOperator[] treeMutationOperators = initiateTreeMutators(mutatorPackage);
+        TreeMutationOperator[] treeMutationOperators = initiateTreeMutators(mutatorPackages);
 
-        return new StartUpOptions(pathToBug, pathToFix, treeMutationOperators);
+        return new StartUpOptions(pathToBug, pathToFix, treeMutationOperators, maxPathCount, maxPathDepth);
     }
 
-    private static TreeMutationOperator[] initiateTreeMutators(String mutatorPackage) throws ClassNotFoundException, IllegalAccessException, InstantiationException
+    private static TreeMutationOperator[] initiateTreeMutators(List<String> mutatorPackages) throws ClassNotFoundException, IllegalAccessException, InstantiationException
     {
         List<TreeMutationOperator> result = new ArrayList<>();
 
-        List<String> mutators = new Reflections("de.ugoe.cs.smartshark.mutaSHARK.util.mutators").getSubTypesOf(TreeMutationOperator.class).stream().filter(c -> !Modifier.isAbstract(c.getModifiers()) && c.getName().contains(mutatorPackage)).map(Class::getName).collect(Collectors.toList());
+        List<String> mutators = new Reflections("de.ugoe.cs.smartshark.mutaSHARK.util.mutators").getSubTypesOf(TreeMutationOperator.class).stream().filter(c ->
+                                                                                                                                                           {
+                                                                                                                                                               if (Modifier.isAbstract(c.getModifiers()))
+                                                                                                                                                               {
+                                                                                                                                                                   return false;
+                                                                                                                                                               }
+                                                                                                                                                               for (String mutatorPackage : mutatorPackages)
+                                                                                                                                                               {
+                                                                                                                                                                   if (c.getName().contains(mutatorPackage))
+                                                                                                                                                                   {
+                                                                                                                                                                       return true;
+                                                                                                                                                                   }
+                                                                                                                                                               }
+                                                                                                                                                               return false;
+                                                                                                                                                           }).map(Class::getName).collect(Collectors.toList());
 
         for (String mutator : mutators)
         {

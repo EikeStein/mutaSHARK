@@ -12,14 +12,14 @@ public class DiffTree
 {
     private List<Action> actions;
 
-    public List<Action> getActions()
-    {
-        return actions;
-    }
-
     public DiffTree(ITree treeFrom, ITree treeTo, boolean recursive) throws TooManyActionsException
     {
         classify(treeFrom, treeTo, recursive);
+    }
+
+    public List<Action> getActions()
+    {
+        return actions;
     }
 
     private void classify(ITree treeFrom, ITree treeTo, boolean recursive) throws TooManyActionsException
@@ -50,9 +50,25 @@ public class DiffTree
                         additionalActions.add(insert);
                     }
                 }
+                if (action instanceof TreeInsert)
+                {
+                    TreeInsert insert = new TreeInsert(descendant, descendant.getParent(), descendant.positionInParent());
+                    if (notContains(additionalActions, insert) && notContains(actions, insert))
+                    {
+                        additionalActions.add(insert);
+                    }
+                }
                 if (action instanceof Delete)
                 {
                     Delete delete = new Delete(descendant);
+                    if (notContains(additionalActions, delete) && notContains(actions, delete))
+                    {
+                        additionalActions.add(delete);
+                    }
+                }
+                if (action instanceof TreeDelete)
+                {
+                    TreeDelete delete = new TreeDelete(descendant);
                     if (notContains(additionalActions, delete) && notContains(actions, delete))
                     {
                         additionalActions.add(delete);
@@ -78,13 +94,44 @@ public class DiffTree
         return true;
     }
 
+    private boolean notContains(List<Action> actions, TreeDelete delete)
+    {
+        for (Action action : actions)
+        {
+            if (action instanceof Delete)
+            {
+                if (action.getNode().isIsomorphicTo(delete.getNode()))
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     private boolean notContains(List<Action> actions, Insert insert)
     {
         for (Action action : actions)
         {
-            if (action instanceof Insert)
+            if (action instanceof Insert || action instanceof TreeInsert)
             {
-                Insert tempInsert = (Insert) action;
+                InsertWrapper tempInsert = new InsertWrapper(action);
+                if (tempInsert.getNode().isIsomorphicTo(insert.getNode()) && tempInsert.getParent().isIsomorphicTo(insert.getParent()) && insert.getName().equals(tempInsert.getName()))
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private boolean notContains(List<Action> actions, TreeInsert insert)
+    {
+        for (Action action : actions)
+        {
+            if (action instanceof Insert || action instanceof TreeInsert)
+            {
+                InsertWrapper tempInsert = new InsertWrapper(action);
                 if (tempInsert.getNode().isIsomorphicTo(insert.getNode()) && tempInsert.getParent().isIsomorphicTo(insert.getParent()) && insert.getName().equals(tempInsert.getName()))
                 {
                     return false;
@@ -112,19 +159,6 @@ public class DiffTree
             this.src = src;
             this.dst = dst;
             this.mappings = mappings;
-        }
-
-        public void match() throws TooManyActionsException
-        {
-            List<ITree> srcSeq = TreeUtils.preOrder(src);
-            List<ITree> dstSeq = TreeUtils.preOrder(dst);
-            List<int[]> lcs = longestCommonSubsequenceWithTypeAndLabel(srcSeq, dstSeq);
-            for (int[] x : lcs)
-            {
-                ITree t1 = srcSeq.get(x[0]);
-                ITree t2 = dstSeq.get(x[1]);
-                mappings.addMapping(t1, t2);
-            }
         }
 
         private static List<int[]> longestCommonSubsequenceWithTypeAndLabel(List<ITree> s0,
@@ -178,6 +212,19 @@ public class DiffTree
             }
             Collections.reverse(indexes);
             return indexes;
+        }
+
+        public void match() throws TooManyActionsException
+        {
+            List<ITree> srcSeq = TreeUtils.preOrder(src);
+            List<ITree> dstSeq = TreeUtils.preOrder(dst);
+            List<int[]> lcs = longestCommonSubsequenceWithTypeAndLabel(srcSeq, dstSeq);
+            for (int[] x : lcs)
+            {
+                ITree t1 = srcSeq.get(x[0]);
+                ITree t2 = dstSeq.get(x[1]);
+                mappings.addMapping(t1, t2);
+            }
         }
     }
 }

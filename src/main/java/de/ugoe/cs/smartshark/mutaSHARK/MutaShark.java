@@ -24,8 +24,6 @@ public class MutaShark
     {
         searchResult = null;
         StartUpOptions startUpOptions = StartUpOptions.parseArgs(args);
-        System.out.println("Test");
-
 
         com.github.gumtreediff.client.Run.initGenerators();
         TreeContext treeFrom = Generators.getInstance().getTree(startUpOptions.pathToFix);
@@ -36,7 +34,7 @@ public class MutaShark
         TreeNode fromNode = getCleanedUpTree(treeFrom); // new TreeNode(TreeHelper.updateTree(treeTo.getRoot()));
         GreedySearch search = new GreedySearch(fromNode, toNode);
 
-        searchResult = search.findPaths(new SearchSettings(4, 100, toNode, Arrays.asList(startUpOptions.mutations)));
+        searchResult = search.findPaths(new SearchSettings(startUpOptions.maxPathCount, startUpOptions.maxPathDepth, toNode, Arrays.asList(startUpOptions.mutations)));
 
         if (searchResult.foundPaths.size() == 0)
         {

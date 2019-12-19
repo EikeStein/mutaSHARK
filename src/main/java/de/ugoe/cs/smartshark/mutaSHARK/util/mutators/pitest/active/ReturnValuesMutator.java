@@ -1,4 +1,4 @@
-package de.ugoe.cs.smartshark.mutaSHARK.util.mutators.pitest;
+package de.ugoe.cs.smartshark.mutaSHARK.util.mutators.pitest.active;
 
 import com.github.gumtreediff.actions.model.*;
 import com.github.gumtreediff.tree.ITree;
@@ -6,11 +6,13 @@ import de.ugoe.cs.smartshark.mutaSHARK.util.InsertWrapper;
 import de.ugoe.cs.smartshark.mutaSHARK.util.TreeHelper;
 import de.ugoe.cs.smartshark.mutaSHARK.util.TreeNode;
 import de.ugoe.cs.smartshark.mutaSHARK.util.mutators.MutatedNode;
+import de.ugoe.cs.smartshark.mutaSHARK.util.mutators.pitest.PitestMutator;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
-public class RelaxedReturnValuesMutator extends PitestMutator
+public class ReturnValuesMutator extends PitestMutator
 {
     @Override
     public List<MutatedNode> getPossibleMutations(TreeNode treeNode, TreeNode target, List<Action> actions)
@@ -74,7 +76,7 @@ public class RelaxedReturnValuesMutator extends PitestMutator
                         int positionInParent = delete.getNode().positionInParent();
                         newParent.removeChildAt(positionInParent);
                         newParent.getTree().insertChild(insert.getNode().deepCopy(), positionInParent);
-                        results.add(new MutatedNode(clonedTree, this, 50, "Cheated-Replaced return object " + TreeHelper.findNodes(delete.getNode(), "SimpleName", Integer.MAX_VALUE).get(0).getLabel() + " with null @~" + delete.getNode().getPos()));
+                        results.add(new MutatedNode(clonedTree, this, 1, "Replaced return object " + TreeHelper.findNodes(delete.getNode(), "SimpleName", Integer.MAX_VALUE).get(0).getLabel() + " with null @~" + delete.getNode().getPos()));
                     }
                 }
             }
@@ -124,7 +126,7 @@ public class RelaxedReturnValuesMutator extends PitestMutator
                         int positionInParent = delete.getNode().positionInParent();
                         newParent.removeChildAt(positionInParent);
                         newParent.getTree().insertChild(insert.getNode().deepCopy(), positionInParent);
-                        results.add(new MutatedNode(clonedTree, this, 50, "Cheated-Replaced return boolean " + oldLabel + " with " + newLabel + " @~" + delete.getNode().getPos()));
+                        results.add(new MutatedNode(clonedTree, this, 1, "Replaced return boolean " + oldLabel + " with " + newLabel + " @~" + delete.getNode().getPos()));
                     }
                 }
             }
@@ -182,7 +184,7 @@ public class RelaxedReturnValuesMutator extends PitestMutator
                         int positionInParent = delete.getNode().positionInParent();
                         newParent.removeChildAt(positionInParent);
                         newParent.getTree().insertChild(insert.getNode().deepCopy(), positionInParent);
-                        results.add(new MutatedNode(clonedTree, this, 50, "Cheated-Replaced return shortbyteint " + oldLabel + " with " + newLabel + " @~" + delete.getNode().getPos()));
+                        results.add(new MutatedNode(clonedTree, this, 1, "Replaced return shortbyteint " + oldLabel + " with " + newLabel + " @~" + delete.getNode().getPos()));
                     }
                 }
             }
@@ -240,7 +242,7 @@ public class RelaxedReturnValuesMutator extends PitestMutator
                         int positionInParent = delete.getNode().positionInParent();
                         newParent.removeChildAt(positionInParent);
                         newParent.getTree().insertChild(insert.getNode().deepCopy(), positionInParent);
-                        results.add(new MutatedNode(clonedTree, this, 50, "Cheated-Replaced return long " + oldLabel + " with " + newLabel + " @~" + delete.getNode().getPos()));
+                        results.add(new MutatedNode(clonedTree, this, 1, "Replaced return long " + oldLabel + " with " + newLabel + " @~" + delete.getNode().getPos()));
                     }
                 }
             }
@@ -308,7 +310,7 @@ public class RelaxedReturnValuesMutator extends PitestMutator
                         int positionInParent = delete.getNode().positionInParent();
                         newParent.removeChildAt(positionInParent);
                         newParent.getTree().insertChild(insert.getNode().deepCopy(), positionInParent);
-                        results.add(new MutatedNode(clonedTree, this, 50, "Cheated-Replaced return long " + oldLabel + " with " + newLabel + " @~" + delete.getNode().getPos()));
+                        results.add(new MutatedNode(clonedTree, this, 1, "Replaced return long " + oldLabel + " with " + newLabel + " @~" + delete.getNode().getPos()));
                     }
 
                 }
@@ -319,25 +321,20 @@ public class RelaxedReturnValuesMutator extends PitestMutator
 
     private boolean isIntByteShortReplaceSupported(String oldLabel, String newLabel)
     {
-        try
+        if (oldLabel.equals("0"))
         {
-            Integer.parseInt(oldLabel);
-            Integer.parseInt(newLabel);
-            return true;
+            return newLabel.equals("1");
         }
-        catch (NumberFormatException e)
-        {
-            return false;
-        }
+        return newLabel.equals("0");
     }
 
     private boolean isLongReplaceSupported(String oldLabel, String newLabel)
     {
         try
         {
-            Long.parseLong(oldLabel);
-            Long.parseLong(newLabel);
-            return true;
+            final long oldValue = Long.parseLong(oldLabel);
+            final long newValue = Long.parseLong(newLabel);
+            return newValue == oldValue + 1;
         }
         catch (NumberFormatException e)
         {
@@ -349,19 +346,13 @@ public class RelaxedReturnValuesMutator extends PitestMutator
     {
         try
         {
+            final long newValue = Long.parseLong(newLabel);
             if (oldLabel.equals("Double.NaN"))
             {
-                Long.parseLong(newLabel);
-                return true;
+                return newValue == 0;
             }
-            if (newLabel.equals("Double.NaN"))
-            {
-                Long.parseLong(oldLabel);
-                return true;
-            }
-            Long.parseLong(oldLabel);
-            Long.parseLong(newLabel);
-            return true;
+            final long oldValue = Long.parseLong(oldLabel);
+            return newValue == -(oldValue + 1.0);
         }
         catch (NumberFormatException e)
         {
@@ -408,3 +399,4 @@ public class RelaxedReturnValuesMutator extends PitestMutator
         return false;
     }
 }
+

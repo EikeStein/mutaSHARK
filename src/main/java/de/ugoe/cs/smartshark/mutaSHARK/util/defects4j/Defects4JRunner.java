@@ -24,11 +24,13 @@ public class Defects4JRunner
     private static void handleBugFix(Defects4JBugFix bugFix) throws ClassNotFoundException, IOException, InstantiationException, IllegalAccessException
     {
         total++;
-        if(total<0)
+        if (total < 0)
+        {
             return;
+        }
         try
         {
-            MutaShark.main(new String[]{bugFix.buggyClassFile, bugFix.fixedClassFile, "-m", "pitest"});
+            MutaShark.main(new String[]{bugFix.buggyClassFile, bugFix.fixedClassFile, "-m", "Rename", "Invert", "-p", "8", "-d", "105"});
             if (MutaShark.getSearchResult().foundPaths.size() > 0)
             {
                 fixed++;

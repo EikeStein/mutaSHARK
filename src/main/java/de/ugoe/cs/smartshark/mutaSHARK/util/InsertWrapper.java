@@ -27,4 +27,18 @@ public class InsertWrapper
         }
         return ((TreeInsert) action).getParent();
     }
+
+    public String getName()
+    {
+        return action.getName();
+    }
+
+    public int getPosition()
+    {
+        if (action instanceof Insert)
+        {
+            return ((Insert) action).getPosition();
+        }
+        return ((TreeInsert) action).getPosition();
+    }
 }

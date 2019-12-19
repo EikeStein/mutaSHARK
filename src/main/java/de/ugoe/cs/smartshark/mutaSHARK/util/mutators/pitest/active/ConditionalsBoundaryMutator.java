@@ -1,17 +1,17 @@
-package de.ugoe.cs.smartshark.mutaSHARK.util.mutators.pitest;
+package de.ugoe.cs.smartshark.mutaSHARK.util.mutators.pitest.active;
 
 import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.actions.model.Delete;
 import com.github.gumtreediff.actions.model.Insert;
 import com.github.gumtreediff.tree.ITree;
-import de.ugoe.cs.smartshark.mutaSHARK.util.TreeHelper;
-import de.ugoe.cs.smartshark.mutaSHARK.util.TreeNode;
+import de.ugoe.cs.smartshark.mutaSHARK.util.*;
 import de.ugoe.cs.smartshark.mutaSHARK.util.mutators.MutatedNode;
+import de.ugoe.cs.smartshark.mutaSHARK.util.mutators.pitest.PitestMutator;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class NegateConditionalsMutator extends PitestMutator
+public class ConditionalsBoundaryMutator extends PitestMutator
 {
     @Override
     public List<MutatedNode> getPossibleMutations(TreeNode treeNode, TreeNode target, List<Action> actions)
@@ -58,7 +58,7 @@ public class NegateConditionalsMutator extends PitestMutator
                     int positionInParent = delete.getNode().positionInParent();
                     newParent.removeChildAt(positionInParent);
                     newParent.getTree().insertChild(insert.getNode().deepCopy(), positionInParent);
-                    results.add(new MutatedNode(clonedTree, this, 1, "Replaced conditional " + originalLabel + " with " + newLabel + " @~" + delete.getNode().getPos()));
+                    results.add(new MutatedNode(clonedTree, this, 1, "Replaced boundary " + originalLabel + " with " + newLabel + " @~" + delete.getNode().getPos()));
                 }
             }
         }
@@ -69,19 +69,17 @@ public class NegateConditionalsMutator extends PitestMutator
     {
         switch (originalLabel)
         {
-            case "==":
-                return newLabel.equalsIgnoreCase("!=");
-            case "!=":
-                return newLabel.equalsIgnoreCase("==");
-            case "<=":
-                return newLabel.equalsIgnoreCase(">");
-            case ">=":
-                return newLabel.equalsIgnoreCase("<");
             case "<":
-                return newLabel.equalsIgnoreCase(">=");
-            case ">":
                 return newLabel.equalsIgnoreCase("<=");
+            case "<=":
+                return newLabel.equalsIgnoreCase("<");
+            case ">":
+                return newLabel.equalsIgnoreCase(">=");
+            case ">=":
+                return newLabel.equalsIgnoreCase(">");
         }
         return false;
     }
 }
+
+

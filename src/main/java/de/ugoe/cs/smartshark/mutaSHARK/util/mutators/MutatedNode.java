@@ -36,6 +36,6 @@ public class MutatedNode extends TreeNode
     @Override
     public String toString()
     {
-        return "MutatedNode{" + "mutationOperator=" + mutationOperator + ", cost=" + cost + ", description='" + description + '\'' + '}';
+        return "MutatedNode{ description='\"" + description +"\", mutationOperator=" + mutationOperator + ", cost=" + cost + "}";
     }
 }

@@ -1,9 +1,12 @@
 package de.ugoe.cs.smartshark.mutaSHARK.testclasses.to;
 
+import java.util.*;
+
 public class ClassA
 {
-    public double methodA(int j)
+    public Set<String> methodA(int j)
     {
-        return Double.NaN;
+        Set<String> s = new HashSet<>();
+        return s;
     }
 }

@@ -1,10 +1,11 @@
-package de.ugoe.cs.smartshark.mutaSHARK.util.mutators.pitest;
+package de.ugoe.cs.smartshark.mutaSHARK.util.mutators.pitest.active;
 
 import com.github.gumtreediff.actions.model.*;
 import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.Tree;
 import de.ugoe.cs.smartshark.mutaSHARK.util.*;
 import de.ugoe.cs.smartshark.mutaSHARK.util.mutators.MutatedNode;
+import de.ugoe.cs.smartshark.mutaSHARK.util.mutators.pitest.PitestMutator;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -207,3 +208,4 @@ public class InvertNegativesMutator extends PitestMutator
         return results;
     }
 }
+
