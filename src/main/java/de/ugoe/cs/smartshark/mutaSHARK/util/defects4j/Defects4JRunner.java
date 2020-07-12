@@ -6,6 +6,7 @@ import de.ugoe.cs.smartshark.mutaSHARK.util.SearchResult;
 import de.ugoe.cs.smartshark.mutaSHARK.util.TooManyActionsException;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -20,9 +21,28 @@ public class Defects4JRunner
     public static int skipped = 0;
     public static int fixed = 0;
 
+    static FileWriter fileWriter;
+
+    static
+    {
+        try
+        {
+            fileWriter = new FileWriter("D:\\Dokumente\\Visual Studio\\Projects\\Masterarbeit\\Masterarbeit\\Projekt\\Code\\mutaSHARK\\results3.txt");
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    public Defects4JRunner() throws IOException
+    {
+    }
+
     public static void main(String[] args) throws ClassNotFoundException, IOException, InstantiationException, IllegalAccessException, InterruptedException
     {
         List<Defects4JBugFix> defects4JBugFixes = new Defects4JLoader(Defects4JRunner::handleBugFix).LoadAll();
+        fileWriter.close();
     }
 
     private static void handleBugFix(Defects4JBugFix bugFix) throws ClassNotFoundException, IOException, InstantiationException, IllegalAccessException
@@ -36,7 +56,10 @@ public class Defects4JRunner
         {
             MutaShark.main(new String[]{bugFix.buggyClassFile, bugFix.fixedClassFile, "-m", "Rename", "Invert", "-p", "1", "-d", "105"});
             final SearchResult searchResult = MutaShark.getSearchResult();
+            fileWriter.write(bugFix.name + "+" + bugFix.buggyClassFile + "+" + bugFix.fixedClassFile);
+            fileWriter.flush();
             addResultString(bugFix, searchResult);
+            fileWriter.write("\n\r");
             if (searchResult.foundPaths.size() > 0)
             {
                 fixed++;
@@ -47,11 +70,17 @@ public class Defects4JRunner
             skipped++;
         }
         System.out.println("Fixed: " + fixed + "/" + total + " skipped: " + skipped + " results: " + results.size());
+        /*for (String r : results)
+        {
+            fileWriter.write(r);
+            fileWriter.write("\n\r");
+        }*/
+        fileWriter.flush();
     }
 
-    private static void addResultString(Defects4JBugFix bugFix, SearchResult searchResult)
+    private static void addResultString(Defects4JBugFix bugFix, SearchResult searchResult) throws IOException
     {
-        results.add(String.join("°", new String[]{bugFix.name, bugFix.buggyClassFile, bugFix.fixedClassFile, searchResult.foundPaths.size() + "", searchResult.closestPaths.size() + ""}));
+        results.add(String.join("+", new String[]{bugFix.name, bugFix.buggyClassFile, bugFix.fixedClassFile, searchResult.foundPaths.size() + "", searchResult.closestPaths.size() + ""}));
         for (SearchPath foundPath : searchResult.foundPaths)
         {
             if (foundPath.edges.size() == 0)
@@ -65,7 +94,9 @@ public class Defects4JRunner
             paras.add(foundPath.totalActionCount + "");
             paras.add(foundPath.remainingActionCount + "");
             paras.addAll(foundPath.edges.stream().map(e -> e.getToSearchNode().getCurrentTreeNode().toString()).collect(Collectors.toList()));
-            String result = String.join("°", paras);
+            String result = String.join("+", paras);
+            fileWriter.write("+" + result);
+            fileWriter.flush();
             results.add(result);
         }
         for (SearchPath foundPath : searchResult.closestPaths)
@@ -78,8 +109,12 @@ public class Defects4JRunner
             paras.add("c");
             paras.add(foundPath.totalCost + "");
             paras.add(foundPath.edges.size() + "");
+            paras.add(foundPath.totalActionCount + "");
+            paras.add(foundPath.remainingActionCount + "");
             paras.addAll(foundPath.edges.stream().map(e -> e.getToSearchNode().getCurrentTreeNode().toString()).collect(Collectors.toList()));
-            String result = String.join("°", paras);
+            String result = String.join("+", paras);
+            fileWriter.write("+" + result);
+            fileWriter.flush();
             results.add(result);
         }
     }

@@ -47,7 +47,7 @@ public class Defects4JLoader
 
         for (String changedClass : changedClasses)
         {
-            Defects4JBugFix defects4JBugFix = LoadBugFix(projectName.name + "(" + index + ")", Paths.get(defects4jBinPath, buggyPath).toString(), Paths.get(defects4jBinPath, fixedPath).toString(), changedClass);
+            Defects4JBugFix defects4JBugFix = LoadBugFix(projectName.name + "+" + index, Paths.get(defects4jBinPath, buggyPath).toString(), Paths.get(defects4jBinPath, fixedPath).toString(), changedClass);
             if (defects4JBugFix != null)
             {
                 defects4JBugFixes.add(defects4JBugFix);

@@ -167,7 +167,7 @@ public class DiffTree
         {
             final int s0Size = s0.size();
             final int s1Size = s1.size();
-            if ((s0Size - s1Size) * (s0Size + s1Size) > 1800000 || s0.size() > 12500 && s1.size() > 12500)
+            if (Math.abs(s0Size - s1Size) * (s0Size + s1Size) > 1200000 || s0.size() > 12500 && s1.size() > 12500)
             {
                 throw new TooManyActionsException(s0Size);
             }
