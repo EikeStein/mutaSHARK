@@ -59,7 +59,7 @@ public class MathMutator extends PitestMutator
                     int positionInParent = delete.getNode().positionInParent();
                     newParent.removeChildAt(positionInParent);
                     newParent.getTree().insertChild(insert.getNode().deepCopy(), positionInParent);
-                    results.add(new MutatedNode(clonedTree, this, 1, "Replaced math " + originalLabel + " with " + newLabel + " @~" + delete.getNode().getPos()));
+                    results.add(new MutatedNode(clonedTree, this, 1.06, "Replaced math " + originalLabel + " with " + newLabel + " @~" + delete.getNode().getPos()));
                 }
             }
         }

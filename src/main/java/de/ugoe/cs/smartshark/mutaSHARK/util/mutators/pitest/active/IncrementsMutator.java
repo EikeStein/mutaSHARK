@@ -129,7 +129,7 @@ public class IncrementsMutator extends PitestMutator
                                         TreeNode parentNode = new TreeNode(parent);
                                         parentNode.removeChildAt(assignmentInsert.getPosition());
                                         parentNode.getTree().insertChild(assignmentInsert.getNode().deepCopy(), assignmentInsert.getPosition());
-                                        results.add(new MutatedNode(clonedTree, this, 1, "Replaced shortcut de-/increment (" + postfixOperator + " to " + newLabel + ") @~" + deleteReference.getNode().getPos()));
+                                        results.add(new MutatedNode(clonedTree, this, 1.03, "Replaced shortcut de-/increment (" + postfixOperator + " to " + newLabel + ") @~" + deleteReference.getNode().getPos()));
                                     }
                                 }
                             }

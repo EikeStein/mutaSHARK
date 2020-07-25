@@ -2,9 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="62cd4c78-7a4f-486f-9d10-52c9c2afeac0" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/results - Kopie.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/results.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/results.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/5.2.1/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.2.1/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/5.2.1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.2.1/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/5.2.1/fileContent/fileContent.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.2.1/fileContent/fileContent.lock" afterDir="false" />
@@ -14,10 +11,18 @@
       <change beforePath="$PROJECT_DIR$/.gradle/5.2.1/javaCompile/javaCompile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.2.1/javaCompile/javaCompile.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/de/ugoe/cs/smartshark/mutaSHARK/util/defects4j/Defects4JLoader.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/de/ugoe/cs/smartshark/mutaSHARK/util/defects4j/Defects4JLoader.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/DiffTree.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/DiffTree.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/defects4j/Defects4JLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/defects4j/Defects4JLoader.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/defects4j/Defects4JRunner.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/defects4j/Defects4JRunner.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/mutators/pitest/active/ConditionalsBoundaryMutator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/mutators/pitest/active/ConditionalsBoundaryMutator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/mutators/pitest/active/IncrementsMutator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/mutators/pitest/active/IncrementsMutator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/mutators/pitest/active/InvertNegativesMutator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/mutators/pitest/active/InvertNegativesMutator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/mutators/pitest/active/MathMutator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/mutators/pitest/active/MathMutator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/mutators/pitest/active/NegateConditionalsMutator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/mutators/pitest/active/NegateConditionalsMutator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/mutators/pitest/active/ReturnValuesMutator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/mutators/pitest/active/ReturnValuesMutator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/mutators/pitest/cheated/MethodCallMutator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/mutators/pitest/cheated/MethodCallMutator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/mutators/pitest/cheated/RelaxedEmptyReturnsMutator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/mutators/pitest/cheated/RelaxedEmptyReturnsMutator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/mutators/pitest/cheated/RelaxedInlineConstantMutator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/mutators/pitest/cheated/RelaxedInlineConstantMutator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/mutators/pitest/cheated/RelaxedReturnValuesMutator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/mutators/pitest/cheated/RelaxedReturnValuesMutator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/mutators/pitest/cheated/RenameMutator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/mutators/pitest/cheated/RenameMutator.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -390,7 +395,14 @@
       <option name="project" value="LOCAL" />
       <updated>1576795813801</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="final 456">
+      <created>1594567936706</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1594567936706</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -401,53 +413,58 @@
     <MESSAGE value="ReturnValueMutator implemented with cheated" />
     <MESSAGE value="up until inclusive EmptyReturnsMutator implemented" />
     <MESSAGE value="Added new mutators" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added new mutators" />
+    <MESSAGE value="final 456" />
+    <option name="LAST_COMMIT_MESSAGE" value="final 456" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="2253" y="103" key="CommitChangelistDialog2" timestamp="1594567912933">
+    <state x="2253" y="103" key="CommitChangelistDialog2" timestamp="1594567930537">
       <screen x="1920" y="0" width="1680" height="1010" />
     </state>
-    <state x="2253" y="103" key="CommitChangelistDialog2/0.0.1920.1040/1920.0.1680.1010@1920.0.1680.1010" timestamp="1594567912933" />
-    <state width="453" height="466" key="DebuggerActiveHint" timestamp="1594567836350">
+    <state x="2253" y="103" key="CommitChangelistDialog2/0.0.1920.1040/1920.0.1680.1010@1920.0.1680.1010" timestamp="1594567930537" />
+    <state width="701" height="466" key="DebuggerActiveHint" timestamp="1594583371690">
       <screen x="1920" y="0" width="1680" height="1010" />
     </state>
-    <state width="453" height="466" key="DebuggerActiveHint/0.0.1920.1040/1920.0.1680.1010@1920.0.1680.1010" timestamp="1594567836350" />
+    <state width="701" height="466" key="DebuggerActiveHint/0.0.1920.1040/1920.0.1680.1010@1920.0.1680.1010" timestamp="1594583371690" />
     <state x="2540" y="262" key="FileChooserDialogImpl" timestamp="1594462997026">
       <screen x="1920" y="0" width="1680" height="1010" />
     </state>
     <state x="2540" y="262" key="FileChooserDialogImpl/0.0.1920.1040/1920.0.1680.1010@1920.0.1680.1010" timestamp="1594462997026" />
-    <state width="1637" height="262" key="GridCell.Tab.0.bottom" timestamp="1594567913091">
+    <state width="818" height="262" key="GridCell.Tab.0.bottom" timestamp="1594624233535">
       <screen x="1920" y="0" width="1680" height="1010" />
     </state>
-    <state width="1637" height="262" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1680.1010@1920.0.1680.1010" timestamp="1594567913091" />
-    <state width="1637" height="262" key="GridCell.Tab.0.center" timestamp="1594567913091">
+    <state width="818" height="262" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1680.1010@1920.0.1680.1010" timestamp="1594624233535" />
+    <state width="818" height="262" key="GridCell.Tab.0.center" timestamp="1594624233534">
       <screen x="1920" y="0" width="1680" height="1010" />
     </state>
-    <state width="1637" height="262" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1680.1010@1920.0.1680.1010" timestamp="1594567913091" />
-    <state width="1637" height="262" key="GridCell.Tab.0.left" timestamp="1594567913091">
+    <state width="818" height="262" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1680.1010@1920.0.1680.1010" timestamp="1594624233534" />
+    <state width="818" height="262" key="GridCell.Tab.0.left" timestamp="1594624233534">
       <screen x="1920" y="0" width="1680" height="1010" />
     </state>
-    <state width="1637" height="262" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1680.1010@1920.0.1680.1010" timestamp="1594567913091" />
-    <state width="1637" height="262" key="GridCell.Tab.0.right" timestamp="1594567913091">
+    <state width="818" height="262" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1680.1010@1920.0.1680.1010" timestamp="1594624233534" />
+    <state width="818" height="262" key="GridCell.Tab.0.right" timestamp="1594624233535">
       <screen x="1920" y="0" width="1680" height="1010" />
     </state>
-    <state width="1637" height="262" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1680.1010@1920.0.1680.1010" timestamp="1594567913091" />
-    <state width="1637" height="262" key="GridCell.Tab.1.bottom" timestamp="1594567913091">
+    <state width="818" height="262" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1680.1010@1920.0.1680.1010" timestamp="1594624233535" />
+    <state width="818" height="262" key="GridCell.Tab.1.bottom" timestamp="1594624233535">
       <screen x="1920" y="0" width="1680" height="1010" />
     </state>
-    <state width="1637" height="262" key="GridCell.Tab.1.bottom/0.0.1920.1040/1920.0.1680.1010@1920.0.1680.1010" timestamp="1594567913091" />
-    <state width="1637" height="262" key="GridCell.Tab.1.center" timestamp="1594567913091">
+    <state width="818" height="262" key="GridCell.Tab.1.bottom/0.0.1920.1040/1920.0.1680.1010@1920.0.1680.1010" timestamp="1594624233535" />
+    <state width="818" height="262" key="GridCell.Tab.1.center" timestamp="1594624233535">
       <screen x="1920" y="0" width="1680" height="1010" />
     </state>
-    <state width="1637" height="262" key="GridCell.Tab.1.center/0.0.1920.1040/1920.0.1680.1010@1920.0.1680.1010" timestamp="1594567913091" />
-    <state width="1637" height="262" key="GridCell.Tab.1.left" timestamp="1594567913091">
+    <state width="818" height="262" key="GridCell.Tab.1.center/0.0.1920.1040/1920.0.1680.1010@1920.0.1680.1010" timestamp="1594624233535" />
+    <state width="818" height="262" key="GridCell.Tab.1.left" timestamp="1594624233535">
       <screen x="1920" y="0" width="1680" height="1010" />
     </state>
-    <state width="1637" height="262" key="GridCell.Tab.1.left/0.0.1920.1040/1920.0.1680.1010@1920.0.1680.1010" timestamp="1594567913091" />
-    <state width="1637" height="262" key="GridCell.Tab.1.right" timestamp="1594567913091">
+    <state width="818" height="262" key="GridCell.Tab.1.left/0.0.1920.1040/1920.0.1680.1010@1920.0.1680.1010" timestamp="1594624233535" />
+    <state width="818" height="262" key="GridCell.Tab.1.right" timestamp="1594624233535">
       <screen x="1920" y="0" width="1680" height="1010" />
     </state>
-    <state width="1637" height="262" key="GridCell.Tab.1.right/0.0.1920.1040/1920.0.1680.1010@1920.0.1680.1010" timestamp="1594567913091" />
+    <state width="818" height="262" key="GridCell.Tab.1.right/0.0.1920.1040/1920.0.1680.1010@1920.0.1680.1010" timestamp="1594624233535" />
+    <state x="2352" y="240" key="Vcs.Push.Dialog.v2" timestamp="1594567947879">
+      <screen x="1920" y="0" width="1680" height="1010" />
+    </state>
+    <state x="2352" y="240" key="Vcs.Push.Dialog.v2/0.0.1920.1040/1920.0.1680.1010@1920.0.1680.1010" timestamp="1594567947879" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -456,11 +473,6 @@
           <url>file://$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/ActionExecutor.java</url>
           <line>50</line>
           <option name="timeStamp" value="178" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/mutators/pitest/active/IncrementsMutator.java</url>
-          <line>66</line>
-          <option name="timeStamp" value="223" />
         </line-breakpoint>
         <line-breakpoint type="java-line">
           <condition expression="possibleMutations.size()&gt;=6 &amp;&amp; depth==0" language="JAVA" />
@@ -475,7 +487,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/defects4j/Defects4JRunner.java</url>
-          <line>69</line>
+          <line>71</line>
           <option name="timeStamp" value="407" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
@@ -484,9 +496,14 @@
           <option name="timeStamp" value="409" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/util/defects4j/Defects4JRunner.java</url>
-          <line>56</line>
-          <option name="timeStamp" value="410" />
+          <url>file://$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/MutaShark.java</url>
+          <line>25</line>
+          <option name="timeStamp" value="417" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/de/ugoe/cs/smartshark/mutaSHARK/StartUpOptions.java</url>
+          <line>88</line>
+          <option name="timeStamp" value="418" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>

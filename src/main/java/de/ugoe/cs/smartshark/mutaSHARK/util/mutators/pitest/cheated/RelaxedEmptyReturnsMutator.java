@@ -69,7 +69,7 @@ public class RelaxedEmptyReturnsMutator extends PitestMutator
                         int positionInParent = delete.getNode().positionInParent();
                         newParent.removeChildAt(positionInParent);
                         newParent.getTree().insertChild(insert.getNode().deepCopy(), positionInParent);
-                        results.add(new MutatedNode(clonedTree, this, 75, "Cheated-Replaced empty return number " + oldLabel + " with " + newLabel + " @~" + delete.getNode().getPos()));
+                        results.add(new MutatedNode(clonedTree, this, 100.1, "Cheated-Replaced empty return number " + oldLabel + " with " + newLabel + " @~" + delete.getNode().getPos()));
                     }
                 }
             }

@@ -198,7 +198,7 @@ public class InvertNegativesMutator extends PitestMutator
                                 TreeNode parentNode = new TreeNode(clonedTree.getTree().getChild(url));
                                 parentNode.removeChildAt(insert.getPosition());
                                 parentNode.getTree().insertChild(insert.getNode().deepCopy(), insert.getPosition());
-                                results.add(new MutatedNode(clonedTree, this, 1, "Removed - prefix @~" + parent.getPos()));
+                                results.add(new MutatedNode(clonedTree, this, 1.01, "Removed - prefix @~" + parent.getPos()));
                             }
                         }
                     }

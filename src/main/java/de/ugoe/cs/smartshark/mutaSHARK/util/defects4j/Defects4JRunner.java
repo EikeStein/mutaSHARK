@@ -27,7 +27,7 @@ public class Defects4JRunner
     {
         try
         {
-            fileWriter = new FileWriter("D:\\Dokumente\\Visual Studio\\Projects\\Masterarbeit\\Masterarbeit\\Projekt\\Code\\mutaSHARK\\results3.txt");
+            fileWriter = new FileWriter("D:\\Dokumente\\Visual Studio\\Projects\\Masterarbeit\\Masterarbeit\\Projekt\\Code\\mutaSHARK\\resultswithoutcheat.txt");
         }
         catch (IOException e)
         {
@@ -54,19 +54,21 @@ public class Defects4JRunner
         }
         try
         {
-            MutaShark.main(new String[]{bugFix.buggyClassFile, bugFix.fixedClassFile, "-m", "Rename", "Invert", "-p", "1", "-d", "105"});
-            final SearchResult searchResult = MutaShark.getSearchResult();
-            fileWriter.write(bugFix.name + "+" + bugFix.buggyClassFile + "+" + bugFix.fixedClassFile);
+            fileWriter.write(bugFix.name + "°" + bugFix.buggyClassFile + "°" + bugFix.fixedClassFile);
             fileWriter.flush();
+            MutaShark.main(new String[]{bugFix.buggyClassFile, bugFix.fixedClassFile, "-m", "active", "optional", "-p", "1", "-d", "105"});
+            final SearchResult searchResult = MutaShark.getSearchResult();
             addResultString(bugFix, searchResult);
-            fileWriter.write("\n\r");
+            fileWriter.write("\n");
             if (searchResult.foundPaths.size() > 0)
             {
                 fixed++;
             }
         }
-        catch (TooManyActionsException e)
+        catch (IndexOutOfBoundsException | TooManyActionsException e)
         {
+            fileWriter.write("°s");
+            fileWriter.write("\n");
             skipped++;
         }
         System.out.println("Fixed: " + fixed + "/" + total + " skipped: " + skipped + " results: " + results.size());
@@ -80,7 +82,6 @@ public class Defects4JRunner
 
     private static void addResultString(Defects4JBugFix bugFix, SearchResult searchResult) throws IOException
     {
-        results.add(String.join("+", new String[]{bugFix.name, bugFix.buggyClassFile, bugFix.fixedClassFile, searchResult.foundPaths.size() + "", searchResult.closestPaths.size() + ""}));
         for (SearchPath foundPath : searchResult.foundPaths)
         {
             if (foundPath.edges.size() == 0)
@@ -94,8 +95,8 @@ public class Defects4JRunner
             paras.add(foundPath.totalActionCount + "");
             paras.add(foundPath.remainingActionCount + "");
             paras.addAll(foundPath.edges.stream().map(e -> e.getToSearchNode().getCurrentTreeNode().toString()).collect(Collectors.toList()));
-            String result = String.join("+", paras);
-            fileWriter.write("+" + result);
+            String result = String.join("°", paras);
+            fileWriter.write("°" + result);
             fileWriter.flush();
             results.add(result);
         }
@@ -112,8 +113,8 @@ public class Defects4JRunner
             paras.add(foundPath.totalActionCount + "");
             paras.add(foundPath.remainingActionCount + "");
             paras.addAll(foundPath.edges.stream().map(e -> e.getToSearchNode().getCurrentTreeNode().toString()).collect(Collectors.toList()));
-            String result = String.join("+", paras);
-            fileWriter.write("+" + result);
+            String result = String.join("°", paras);
+            fileWriter.write("°" + result);
             fileWriter.flush();
             results.add(result);
         }
