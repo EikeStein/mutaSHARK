@@ -27,7 +27,7 @@ public class Defects4JRunner
     {
         try
         {
-            fileWriter = new FileWriter("D:\\Dokumente\\Visual Studio\\Projects\\Masterarbeit\\Masterarbeit\\Projekt\\Code\\mutaSHARK\\resultswithoutcheat.txt");
+            fileWriter = new FileWriter("D:\\Dokumente\\Visual Studio\\Projects\\Masterarbeit\\Masterarbeit\\Projekt\\Code\\mutaSHARK\\resultswithcheatmath.txt");
         }
         catch (IOException e)
         {
@@ -56,7 +56,7 @@ public class Defects4JRunner
         {
             fileWriter.write(bugFix.name + "°" + bugFix.buggyClassFile + "°" + bugFix.fixedClassFile);
             fileWriter.flush();
-            MutaShark.main(new String[]{bugFix.buggyClassFile, bugFix.fixedClassFile, "-m", "active", "optional", "-p", "1", "-d", "105"});
+            MutaShark.main(new String[]{bugFix.buggyClassFile, bugFix.fixedClassFile, "-m", "active", "cheated", "-p", "1", "-d", "500"});
             final SearchResult searchResult = MutaShark.getSearchResult();
             addResultString(bugFix, searchResult);
             fileWriter.write("\n");
