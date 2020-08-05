@@ -11,6 +11,7 @@ import de.ugoe.cs.smartshark.mutaSHARK.util.mutators.pitest.PitestMutator;
 import java.util.ArrayList;
 import java.util.List;
 
+// Not tested
 public class EmptyReturnsMutator extends PitestMutator
 {
     @Override

@@ -46,7 +46,8 @@ public class RenameMutator extends PitestMutator
                         TreeNode parentNode = new TreeNode(parent);
                         parentNode.removeChildAt(Math.min(insert.getPosition(), parentNode.getTree().getChildren().size() - 1));
                         parentNode.getTree().insertChild(insert.getNode().deepCopy(), Math.min(parentNode.getTree().getChildren().size(), insert.getPosition()));
-                        results.add(new MutatedNode(new TreeNode(deepCopy), this, 100.6, "Cheated-Renamed " + delete.getNode().getLabel() + " to " + insert.getNode().getLabel() + " @~" + delete.getNode().getPos()));
+                        // 100.001 to break ties --> deterministic
+                        results.add(new MutatedNode(new TreeNode(deepCopy), this, 100.001, "Cheated-Renamed " + delete.getNode().getLabel() + " to " + insert.getNode().getLabel() + " @~" + delete.getNode().getPos()));
                     }
                 }
             }

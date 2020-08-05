@@ -35,7 +35,7 @@ public class MethodCallMutator extends PitestMutator
                 ITree node = deepCopy.getChild(nodeUrl);
                 TreeNode parentNode = new TreeNode(parent);
                 parentNode.removeChild(node);
-                results.add(new MutatedNode(new TreeNode(deepCopy), this, 100.4, "Cheated-Removed method invocation " + TreeHelper.getLabelInside(delete.getNode()) + " @~" + delete.getNode().getPos()));
+                results.add(new MutatedNode(new TreeNode(deepCopy), this, 100, "Cheated-Removed method invocation " + TreeHelper.getLabelInside(delete.getNode()) + " @~" + delete.getNode().getPos()));
             }
         }
 

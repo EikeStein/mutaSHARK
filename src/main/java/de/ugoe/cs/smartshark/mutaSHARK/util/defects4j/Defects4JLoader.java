@@ -72,6 +72,7 @@ public class Defects4JLoader
             String fixedClassFile = findJavaFileForClassPath(fixedPath, changedClass);
 
             Defects4JBugFix defects4JBugFix = new Defects4JBugFix(name, buggyClassFile, fixedClassFile);
+
             loadCallback.BugFixLoaded(defects4JBugFix);
             return defects4JBugFix;
         } catch (IOException e)

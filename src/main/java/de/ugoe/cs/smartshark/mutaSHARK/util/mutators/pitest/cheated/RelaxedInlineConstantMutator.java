@@ -311,7 +311,7 @@ public class RelaxedInlineConstantMutator extends PitestMutator
                         int positionInParent = delete.getNode().positionInParent();
                         newParent.removeChildAt(positionInParent);
                         newParent.getTree().insertChild(insert.getNode().deepCopy(), positionInParent);
-                        results.add(new MutatedNode(clonedTree, this, 100.3, "Cheated-Replaced return double " + oldLabel + " with " + newLabel + " @~" + delete.getNode().getPos()));
+                        results.add(new MutatedNode(clonedTree, this, 75, "Cheated-Replaced return double " + oldLabel + " with " + newLabel + " @~" + delete.getNode().getPos()));
                     }
 
                 }

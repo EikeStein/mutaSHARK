@@ -58,7 +58,7 @@ public class ConditionalsBoundaryMutator extends PitestMutator
                     int positionInParent = delete.getNode().positionInParent();
                     newParent.removeChildAt(positionInParent);
                     newParent.getTree().insertChild(insert.getNode().deepCopy(), positionInParent);
-                    results.add(new MutatedNode(clonedTree, this, 1.05, "Replaced boundary " + originalLabel + " with " + newLabel + " @~" + delete.getNode().getPos()));
+                    results.add(new MutatedNode(clonedTree, this, 1, "Replaced boundary " + originalLabel + " with " + newLabel + " @~" + delete.getNode().getPos()));
                 }
             }
         }

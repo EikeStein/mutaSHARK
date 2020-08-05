@@ -5,7 +5,6 @@ import com.github.gumtreediff.tree.ITree;
 import com.github.gumtreediff.tree.TreeContext;
 import de.ugoe.cs.smartshark.mutaSHARK.util.*;
 import de.ugoe.cs.smartshark.mutaSHARK.util.mutators.TreeMutationOperator;
-import de.ugoe.cs.smartshark.mutaSHARK.util.mutators.mujava.arithmetic.ArithmeticOperatorInsertionShortCutMutator;
 
 import java.io.IOException;
 import java.util.ArrayList;

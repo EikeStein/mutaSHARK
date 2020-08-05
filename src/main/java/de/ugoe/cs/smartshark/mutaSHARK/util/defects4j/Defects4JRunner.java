@@ -8,6 +8,7 @@ import de.ugoe.cs.smartshark.mutaSHARK.util.TooManyActionsException;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.MalformedInputException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -16,7 +17,9 @@ import java.util.stream.Collectors;
 
 public class Defects4JRunner
 {
-    final private static List<String> results = new ArrayList<>();
+    private final static String outputPath = "C:\\Users\\Eike\\OneDrive\\Documents\\Ausbildung\\Uni\\2020\\Master\\results\\withcheat\\results.csv";
+    private final static List<String> results = new ArrayList<>();
+
     public static int total = 0;
     public static int skipped = 0;
     public static int fixed = 0;
@@ -27,7 +30,7 @@ public class Defects4JRunner
     {
         try
         {
-            fileWriter = new FileWriter("D:\\Dokumente\\Visual Studio\\Projects\\Masterarbeit\\Masterarbeit\\Projekt\\Code\\mutaSHARK\\resultswithcheatmath.txt");
+            fileWriter = new FileWriter(outputPath);
         }
         catch (IOException e)
         {
@@ -35,7 +38,7 @@ public class Defects4JRunner
         }
     }
 
-    public Defects4JRunner() throws IOException
+    public Defects4JRunner()
     {
     }
 
@@ -56,7 +59,7 @@ public class Defects4JRunner
         {
             fileWriter.write(bugFix.name + "°" + bugFix.buggyClassFile + "°" + bugFix.fixedClassFile);
             fileWriter.flush();
-            MutaShark.main(new String[]{bugFix.buggyClassFile, bugFix.fixedClassFile, "-m", "active", "cheated", "-p", "1", "-d", "500"});
+            MutaShark.main(new ResearchConfig(bugFix.buggyClassFile, bugFix.fixedClassFile).getStartupParameters());
             final SearchResult searchResult = MutaShark.getSearchResult();
             addResultString(bugFix, searchResult);
             fileWriter.write("\n");
@@ -65,21 +68,18 @@ public class Defects4JRunner
                 fixed++;
             }
         }
-        catch (IndexOutOfBoundsException | TooManyActionsException e)
+        catch (IndexOutOfBoundsException | TooManyActionsException | MalformedInputException e)
         {
             fileWriter.write("°s");
             fileWriter.write("\n");
             skipped++;
         }
+        // Progress info
         System.out.println("Fixed: " + fixed + "/" + total + " skipped: " + skipped + " results: " + results.size());
-        /*for (String r : results)
-        {
-            fileWriter.write(r);
-            fileWriter.write("\n\r");
-        }*/
         fileWriter.flush();
     }
 
+    // Generates the output format
     private static void addResultString(Defects4JBugFix bugFix, SearchResult searchResult) throws IOException
     {
         for (SearchPath foundPath : searchResult.foundPaths)

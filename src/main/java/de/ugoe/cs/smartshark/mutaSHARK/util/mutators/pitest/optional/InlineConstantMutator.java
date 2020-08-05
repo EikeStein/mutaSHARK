@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+// Not tested
 public class InlineConstantMutator extends PitestMutator
 {
     @Override

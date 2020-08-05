@@ -310,7 +310,7 @@ public class ReturnValuesMutator extends PitestMutator
                         int positionInParent = delete.getNode().positionInParent();
                         newParent.removeChildAt(positionInParent);
                         newParent.getTree().insertChild(insert.getNode().deepCopy(), positionInParent);
-                        results.add(new MutatedNode(clonedTree, this, 1.04, "Replaced return floatdouble " + oldLabel + " with " + newLabel + " @~" + delete.getNode().getPos()));
+                        results.add(new MutatedNode(clonedTree, this, 1, "Replaced return floatdouble " + oldLabel + " with " + newLabel + " @~" + delete.getNode().getPos()));
                     }
 
                 }
